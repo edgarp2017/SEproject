@@ -1,1 +1,1 @@
-# seproject
+# CSC 322 Project
