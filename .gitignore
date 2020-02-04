@@ -1,2 +1,4 @@
 clone/
 .vscode/
+db.sqlite3
+.coverage
