@@ -5,10 +5,8 @@ from django.http import HttpResponse
 
 
 def home(request):
-    return HttpResponse('<h1>HELLO WORLD</h1>')
-   # return render(request, 'teamup/home.html', {'title': 'Home'})
+    return render(request, 'teamup/home.html', {'title': 'Home'})
 
 
 def settings(request):
-    return HttpResponse('<h1>HELLO WORLD</h1>')
-    # return render(request, 'teamup/settings.html', {'title': 'settings'})
+    return render(request, 'teamup/settings.html', {'title': 'settings'})
