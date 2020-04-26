@@ -8,16 +8,25 @@
     {% if user.is_authenticated %}
         {% if user.profile.is_SU %}
             {% if users %}
+                <h1>Hello</h1>
                 {% for user in users %}
-                    {{ user.username }}
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <p>
-                        {{ field.label_tag }}<br>
-                        {{ field }}
-                        </p>
-                    {% endfor %}
+                    <div class="card">
+                        {{ user }}
+                        {{ user.profile.email }}
+                        {{ user.profile.firstName }}
+                        {{ user.profile.lastName }}
+                        {{ user.profile.email }}
+                        {{ user.profile.interest }}
+                        {{ user.profile.credential }}
+                        {{ user.profile.reference }}
+                    </div>
                 {% endfor %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.user }}
+                    {{ form.response }}
+                    <input type="submit" value= "Submit"> 
+                </form>
             {% else %}
                 <h2>No new users founds</h2>
             {% endif %}
