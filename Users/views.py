@@ -1,28 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import views
 from django.contrib.auth.models import User
+from django.views.generic.edit import FormView
 from .forms import (
-    SignUpForm,
     NewUserForm,
 )
+from .models import (
+    UsersWaitingResponse,
+    User
+)
 
-class LoginView(views.LoginView):
-    template_name = 'Users/login.html'
+class NewUserFormView(FormView):
+    template_name = 'Users/newusers.html'
+    form_class = NewUserForm
+    success_url = '/users/newusers/'
 
-def SignUpView(request):
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-        user = form.save(commit=False)
-        user.is_active = False
-        user.save()
-        return redirect('/users')
-    return render(request, 'users/signup.html', {'form': form})
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
-def NewUserView(request):
-    users = User.objects.all().filter(is_active=False)
-    form = NewUserForm(request.POST)
-    if form.is_valid():
-        user.is_active = False
-        user.save()
-        return redirect('/users')
-    return render(request, 'Users/newusers.html', {'form': form, 'users': users})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = User.objects.all().filter(is_active=False)
+        return context

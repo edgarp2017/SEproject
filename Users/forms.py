@@ -1,14 +1,10 @@
 from django import forms
-from .models import Profile
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Field
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import UsersWaitingResponse, RejectedUsers
+from .choices import *
 
 class SignUpForm(UserCreationForm):
-    helper = FormHelper()
-    helper.form_method = 'POST'
-    helper.add_input(Submit('submit', 'Submit'))
     firstName = forms.CharField()
     lastName = forms.CharField()
     email = forms.EmailField()
@@ -30,27 +26,28 @@ class SignUpForm(UserCreationForm):
             'reference',
         ]
 
-class NewUserForm(forms.ModelForm):
-    helper = FormHelper()
-    helper.form_method = 'POST'
-    helper.add_input(Submit('submit', 'Submit'))
-    user = forms.MultipleChoiceField(
-        required=True,
-        widget=forms.CheckboxInput,
-        choices = User.objects.all().filter(is_active=False),
-    )
-    answer = forms.MultipleChoiceField(
-        required=True,
-        widget=forms.CheckboxSelectMultiple,
-        choices = [
-            ('accept', 'Accept'),
-            ('reject', 'Reject')
-        ],
-    )
+class NewUserForm(forms.Form):
+    user = forms.ChoiceField(choices=getUsers())
+    response = forms.ChoiceField(choices=RESPONSE_CHOICES)
 
     class Meta:
-        model = User
         fields = [
             'user',
-            'answer'
+            'response',
         ]
+
+    def save(self):
+        data = self.cleaned_data
+        user = User.objects.get(username=data['user'])
+        uid = User.objects.get(username=data['user']).pk
+
+        if data['response'] == '1':
+            user.is_active = True
+            u = UsersWaitingResponse.objects.get(user=uid)
+            u.delete()
+            user.save()
+        else:
+            rejecteduser = RejectedUsers.objects.create(user=data['user'])
+            user.delete()
+            rejecteduser.save()
+         
