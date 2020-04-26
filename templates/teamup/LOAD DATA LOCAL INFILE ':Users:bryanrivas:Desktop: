@@ -1,0 +1,17 @@
+LOAD DATA LOCAL INFILE '/Users/bryanrivas/Desktop/Software Design 1/Database1/task_data.csv'
+INTO TABLE Tasks
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+SELECT * FROM Tasks;
+TRUNCATE TABLE Tasks;
+
+LOAD DATA LOCAL INFILE '/Users/bryanrivas/Desktop/Software Design 1/Database1/task_data.csv'
+INTO TABLE Tasks
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE '/Users/bryanrivas/Desktop/Software Design 1/Database1/task_data.csv'
+INTO TABLE Tasks
+FIELDS TERMINATED B
