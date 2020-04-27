@@ -5,12 +5,12 @@ from django.dispatch import receiver
 
 class Application(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    firstName = models.CharField(max_length=50, default='firstName', null=False)
-    lastName = models.CharField(max_length=50, default='lastName', null=False)
-    email = models.EmailField(max_length=254, null=False, default='email@email.com')
-    interest = models.TextField(default='My interest are', null=False)
-    credential = models.TextField(default='My credentials are', null=False)
-    reference = models.CharField(max_length=50, null=False, default='Name')
+    firstName = models.CharField(max_length=50, null=False)
+    lastName = models.CharField(max_length=50, null=False)
+    email = models.EmailField(max_length=254, null=False)
+    interest = models.TextField(null=False)
+    credential = models.TextField(null=False)
+    reference = models.CharField(max_length=50, null=False)
 
     def __str__(self):
         return self.user.username
@@ -21,7 +21,7 @@ class UsersWaitingResponse(models.Model):
     def __str__(self):
         return self.user.username
 
-class AcceptedUsers(models.Model):
+class AcceptedUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_OU = models.BooleanField(default=True)
     is_VIP = models.BooleanField(default=False)
@@ -31,11 +31,11 @@ class AcceptedUsers(models.Model):
     def __str__(self):
         return self.user.username
 
-class RejectedUsers(models.Model):
+class RejectedUser(models.Model):
     user = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):

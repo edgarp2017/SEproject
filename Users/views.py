@@ -14,7 +14,7 @@ from .models import (
 class NewUserFormView(FormView):
     template_name = 'Users/newusers.html'
     form_class = NewUserForm
-    success_url = '/users/newusers/'
+    success_url = '/users/'
 
     def form_valid(self, form):
         form.save()
