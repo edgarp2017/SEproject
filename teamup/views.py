@@ -15,5 +15,6 @@ def settings(request):
 def login(request):
     return render(request, 'Users/login.html', {'title': 'login'})
 
+
 def signup(request):
     return render(request, 'Users/signup.html', {'title': 'signup'})
