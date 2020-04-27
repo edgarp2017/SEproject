@@ -10,3 +10,11 @@ def home(request):
 
 def settings(request):
     return render(request, 'teamup/settings.html', {'title': 'settings'})
+
+
+def login(request):
+    return render(request, 'Users/login.html', {'title': 'login'})
+
+
+def signup(request):
+    return render(request, 'Users/signup.html', {'title': 'signup'})

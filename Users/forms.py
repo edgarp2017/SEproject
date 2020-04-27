@@ -35,11 +35,11 @@ class NewUserForm(forms.Form):
     user = forms.ModelChoiceField(queryset=UsersWaitingResponse.objects.all())
     response = forms.ChoiceField(choices=RESPONSE_CHOICES)
 
-    class Meta:
-        fields = [
-            'user',
-            'response',
-        ]
+   # class Meta:
+    #    fields = [
+     #       'user',
+      #      'response',
+     #   ]
 
     def save(self):
         data = self.cleaned_data
