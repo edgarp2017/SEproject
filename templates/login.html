@@ -1,25 +1,28 @@
+{% extends 'Navbar.html' %}
 
 {% block content %}
-  <h2>Log in to My Site</h2>
-  {% if form.errors %}
+  <div class="col-sm-10 offset-sm-1 text-center">
+    <h3 class="display-10">TeamUp Login</h3>
+    <a href="{% url 'Signup' %}">Don't have an account? Click here to Signup!</a>
+    {% if form.errors %}
     <p style="color: red">Your username and password didn't match. Please try again.</p>
   {% endif %}
+  </div>
+  
   <form method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ next }}" />
     {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}<br>
+      <div class="row justify-content-center">
+        {{ field.label_tag }}
+        {{ field }}
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
-        {% if field.help_text %}
-          <p><small style="color: grey">{{ field.help_text }}</small></p>
-        {% endif %}
-      </p>
+      </div>
     {% endfor %}
-    <button type="submit">Log in</button>
+    <div class="col text-center">
+      <button type="submit" class="btn btn-primary my-1">Login</button>
+    </div>
   </form>
-  <a href="{% url 'Signup' %}">Click Here to Sign Up!</a>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UsersWaitingResponse, RejectedUsers
+from .models import Application, UsersWaitingResponse, AcceptedUser, RejectedUser
 from .choices import *
 
 class SignUpForm(UserCreationForm):
@@ -26,8 +26,13 @@ class SignUpForm(UserCreationForm):
             'reference',
         ]
 
+    def ApplicationInfo(self,user):
+        data = self.cleaned_data
+        application = Application.objects.create(user=user, firstName=data['firstName'], lastName=data['lastName'],
+        email=data['email'], interest=data['interest'], credential=data['credential'], reference=data['reference'])
+
 class NewUserForm(forms.Form):
-    user = forms.ChoiceField(choices=getUsers())
+    user = forms.ModelChoiceField(queryset=UsersWaitingResponse.objects.all())
     response = forms.ChoiceField(choices=RESPONSE_CHOICES)
 
     class Meta:
@@ -42,12 +47,16 @@ class NewUserForm(forms.Form):
         uid = User.objects.get(username=data['user']).pk
 
         if data['response'] == '1':
+            #remove from UsersWaitingResponse 
+            removeUser = UsersWaitingResponse.objects.get(user=uid)
+            removeUser.delete()
+            #enable the account for it can login
             user.is_active = True
-            u = UsersWaitingResponse.objects.get(user=uid)
-            u.delete()
             user.save()
+            #Add user to AcceptedUser
+            accept = AcceptedUser.objects.create(user=user)
         else:
-            rejecteduser = RejectedUsers.objects.create(user=data['user'])
+            rejected = RejectedUsers.objects.create(user=data['user'])
             user.delete()
-            rejecteduser.save()
+            rejected.save()
          

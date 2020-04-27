@@ -1,31 +1,34 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'Navbar.html' %}
+
+{% block content %}
     {% if user.is_authenticated %}
-        {% if user.profile.is_SU %}
+        {% if user.accepteduser.is_SU %}
             {% if users %}
-                <h1>Hello</h1>
-                {% for user in users %}
-                    <div class="card">
-                        {{ user }}
-                        {{ user.profile.email }}
-                        {{ user.profile.firstName }}
-                        {{ user.profile.lastName }}
-                        {{ user.profile.email }}
-                        {{ user.profile.interest }}
-                        {{ user.profile.credential }}
-                        {{ user.profile.reference }}
-                    </div>
-                {% endfor %}
+                <h1> Hello {{ user.accepteduser }}!</h1>
+                <div class="row">
+                    {% for user in users %}
+                        <div class="col-sm-2">
+                            <div class="card text-center">
+                                <div class="card-header">
+                                    <p>User: {{ user.application }} </p>
+                                </div>
+                                <div class="card-text">
+                                    <p>Email: {{ user.application.email }}</p>
+                                    <p>First Name: {{ user.application.firstName }}</p>
+                                    <p>Last Name: {{ user.application.lastName }}</p>
+                                    <p>Interest: {{ user.application.interest }}</p>
+                                    <p>Credential: {{ user.application.credential }}</p>
+                                    <p>Reference: {{ user.application.reference }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
                 <form action="" method="post">
                     {% csrf_token %}
                     {{ form.user }}
                     {{ form.response }}
-                    <input type="submit" value= "Submit"> 
+                    <input class="btn btn-primary" type="submit" value= "Submit"> 
                 </form>
             {% else %}
                 <h2>No new users founds</h2>
@@ -34,7 +37,6 @@
             <h2>You are not a super user!</h2>
         {% endif %}
     {% else %}
-        <a href="{% url 'Users:Login' %}">Click to login here</a>
+        <a href="{% url 'Login' %}" class="btn btn-primary">Click to login here</a>
     {% endif %}
-</body>
-</html>
+{% endblock %}

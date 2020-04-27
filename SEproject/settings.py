@@ -126,8 +126,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = '/users'
-LOGOUT_REDIRECT_URL = '/users'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 ACCOUNT_ACTIVATION_DAYS = 7

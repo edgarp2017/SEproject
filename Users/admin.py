@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Application, UsersWaitingResponse, AcceptedUsers, RejectedUsers
+from .models import Application, UsersWaitingResponse, AcceptedUser, RejectedUser
 
 admin.site.register(Application)
 admin.site.register(UsersWaitingResponse)
-admin.site.register(AcceptedUsers)
-admin.site.register(RejectedUsers)
+admin.site.register(AcceptedUser)
+admin.site.register(RejectedUser)

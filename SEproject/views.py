@@ -8,6 +8,7 @@ def SignUpView(request):
         user = form.save(commit=False)
         user.is_active = False
         user.save()
+        form.ApplicationInfo(user)
         return redirect('/users')
     return render(request, 'signup.html', {'form': form})
 
