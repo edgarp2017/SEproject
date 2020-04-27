@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Application, UsersWaitingResponse, AcceptedUser, RejectedUser
-from .choices import *
+from .choices import RESPONSE_CHOICES
 
 class SignUpForm(UserCreationForm):
     firstName = forms.CharField()
@@ -35,11 +35,11 @@ class NewUserForm(forms.Form):
     user = forms.ModelChoiceField(queryset=UsersWaitingResponse.objects.all())
     response = forms.ChoiceField(choices=RESPONSE_CHOICES)
 
-   # class Meta:
-    #    fields = [
-     #       'user',
-      #      'response',
-     #   ]
+    class Meta:
+       fields = [
+           'user',
+           'response'
+       ]
 
     def save(self):
         data = self.cleaned_data
