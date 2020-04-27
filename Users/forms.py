@@ -26,15 +26,15 @@ class SignUpForm(UserCreationForm):
             'reference',
         ]
 
-class NewUserForm(forms.Form):
-    user = forms.ChoiceField(choices=getUsers())
-    response = forms.ChoiceField(choices=RESPONSE_CHOICES)
+#class NewUserForm(forms.Form):
+ #   user = forms.ChoiceField(choices=getUsers())
+  #  response = forms.ChoiceField(choices=RESPONSE_CHOICES)
 
-    class Meta:
-        fields = [
-            'user',
-            'response',
-        ]
+   # class Meta:
+    #    fields = [
+     #       'user',
+      #      'response',
+     #   ]
 
     def save(self):
         data = self.cleaned_data
@@ -50,4 +50,3 @@ class NewUserForm(forms.Form):
             rejecteduser = RejectedUsers.objects.create(user=data['user'])
             user.delete()
             rejecteduser.save()
-         

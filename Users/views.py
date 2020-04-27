@@ -10,6 +10,7 @@ from .models import (
     User
 )
 
+
 class NewUserFormView(FormView):
     template_name = 'Users/newusers.html'
     form_class = NewUserForm
