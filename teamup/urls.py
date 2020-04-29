@@ -5,5 +5,5 @@ app_name = "teamup"
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('groups/', views.settings, name='settings'),
+    path('groups/', views.groups, name='groups'),
 ]

@@ -2,6 +2,7 @@ body {
   background: #fafafa;
   color: #333333;
   margin-top: 5rem;
+  padding: 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -97,4 +98,18 @@ html body {
 
 .myUl {
   position: left
+}
+
+.mbutton {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+div.project-descr {
+  margin-top: 5.3em;
+}
+
+.my-text {
+  font-weight: bold;
 }
