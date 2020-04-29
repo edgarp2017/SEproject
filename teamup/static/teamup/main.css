@@ -91,6 +91,10 @@ footer {
 }
 
 html body {
-    height: 865px; /*Adjust this value*/
+    height: 903px; /*Adjust this value*/
     position: relative;
+}
+
+.myUl {
+  position: left
 }
