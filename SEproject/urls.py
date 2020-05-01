@@ -10,7 +10,8 @@ from .views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('teamup.urls', namespace='teamup')),
+    #path('', include('teamup.urls', namespace='teamup')),
+    path('', include('Groups.urls', namespace='Groups')),
     path('signup/', SignUpView, name="Signup"), 
     path('login/', LoginView.as_view(), name="Login"), 
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='Logout'),

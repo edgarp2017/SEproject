@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'teamup/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'groups/main.css' %}">
 
     {% if title %}
         <title>Django Blog - {{ title }}</title>
@@ -22,20 +22,20 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'teamup:home' %}">TeamUp!</a>
+      <a class="navbar-brand" href="{% url 'Groups:home' %}">TeamUp!</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="{% url 'teamup:home' %}">Home
+            <a class="nav-link" href="{% url 'Groups:home' %}">Home
               <span class="sr-only">(current)</span>
             </a>
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'teamup:groups' %}">Group</a>
+            <a class="nav-link" href="{% url 'Groups:groups' %}">Group</a>
           </li>
           {% endif %}
           <li class="nav-item">

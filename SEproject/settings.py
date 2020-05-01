@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'teamup.apps.TeamupConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'SEproject',
     'Users',
+    'Groups',
 ]
 
 MIDDLEWARE = [
