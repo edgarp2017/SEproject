@@ -41,22 +41,24 @@ class NewUserForm(forms.Form):
            'response'
        ]
 
-    def save(self):
+    def acceptRejectFunction(self):
+        '''Adds User to either accepted or rejected user list'''
         data = self.cleaned_data
         user = User.objects.get(username=data['user'])
-        uid = User.objects.get(username=data['user']).pk
 
         if data['response'] == '1':
-            #remove from UsersWaitingResponse 
-            removeUser = UsersWaitingResponse.objects.get(user=uid)
-            removeUser.delete()
             #enable the account for it can login
             user.is_active = True
             user.save()
             #Add user to AcceptedUser
             accept = AcceptedUser.objects.create(user=user)
         else:
-            rejected = RejectedUsers.objects.create(user=data['user'])
+            rejected = RejectedUser.objects.create(user=data['user'])
             user.delete()
             rejected.save()
+
+        #remove from UsersWaitingResponse 
+        uid = User.objects.get(username=data['user']).pk #gets userID so it can be removed
+        removeUser = UsersWaitingResponse.objects.get(user=uid)
+        removeUser.delete()
          

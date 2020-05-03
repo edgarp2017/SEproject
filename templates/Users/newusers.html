@@ -4,7 +4,7 @@
 {% block content %}
     {% if user.is_authenticated %}
         {% if user.accepteduser.is_SU %}
-            {% if users %}
+            {% if usersWaiting %}
                 <h1> Hello {{ user.accepteduser }}!</h1>
                 <div class="row">
                     {% for user in users %}

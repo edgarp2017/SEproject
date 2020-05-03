@@ -17,6 +17,7 @@ class Application(models.Model):
 
 class UsersWaitingResponse(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    application = models.OneToOneField(Application, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.user.username
@@ -35,9 +36,12 @@ class RejectedUser(models.Model):
     user = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.user.username
+        return self.user
 
 @receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
+def addToWaitList(sender, instance, created, **kwargs):
     if created:
         UsersWaitingResponse.objects.create(user=instance)
+
+
+        

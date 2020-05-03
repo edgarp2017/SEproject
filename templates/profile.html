@@ -1,0 +1,22 @@
+{% extends 'Navbar.html' %}
+{% load static %}
+
+{% block content %}
+    <p>{{ user.username }} </p>
+    <div class="">
+        <p>Email: {{ user.application.email }}</p>
+        <p>First Name: {{ user.application.firstName }} </p>
+        <p>Last Name: {{ user.application.lastName }} </p>
+        <p>Rep Score: {{ user.accepteduser.rep_score }}</p>
+        {% if user.accepteduser.is_OU %}
+            <div class="">Role: OU</div>
+        {% endif %}
+        {% if user.accepteduser.is_VIP %}
+            <div class="">Role: OU</div>
+        {% endif %}
+        {% if user.accepteduser.is_SU %}
+            <div class="">Role: OU</div>
+        {% endif %}
+    </div>
+    
+{% endblock %}
