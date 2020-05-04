@@ -5,7 +5,13 @@ from django.dispatch import receiver
 
 # Create your models here.
 
-#class Groups(models.Model):
+class MyGroup(models.Model):
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    purpose = models.CharField(max_length=254, null=False, blank=True, default=None)
+    groupName= models.CharField(max_length=100, null=False, blank=False, default=None)
+
+    def __str__(self):
+        return self.owner.username
 
 
 #class Meetup(models.Model):
