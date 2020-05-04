@@ -11,7 +11,7 @@ def SignUpView(request):
         user.is_active = False
         user.save()
         form.ApplicationInfo(user)
-        return redirect('/users')
+        return redirect('/')
     return render(request, 'signup.html', {'form': form})
     
 @login_required(login_url="/login")

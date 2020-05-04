@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Application, UsersWaitingResponse, AcceptedUser, RejectedUser
 from .choices import RESPONSE_CHOICES
+from django.core.exceptions import ObjectDoesNotExist
 
 class SignUpForm(UserCreationForm):
     firstName = forms.CharField()
@@ -45,6 +46,7 @@ class NewUserForm(forms.Form):
         '''Adds User to either accepted or rejected user list'''
         data = self.cleaned_data
         user = User.objects.get(username=data['user'])
+        userID = User.objects.get(username=data['user']).pk
 
         if data['response'] == '1':
             #enable the account for it can login
@@ -52,13 +54,25 @@ class NewUserForm(forms.Form):
             user.save()
             #Add user to AcceptedUser
             accept = AcceptedUser.objects.create(user=user)
-        else:
-            rejected = RejectedUser.objects.create(user=data['user'])
-            user.delete()
-            rejected.save()
 
-        #remove from UsersWaitingResponse 
-        uid = User.objects.get(username=data['user']).pk #gets userID so it can be removed
-        removeUser = UsersWaitingResponse.objects.get(user=uid)
-        removeUser.delete()
-         
+            #remove from UsersWaitingResponse 
+            removeUser = UsersWaitingResponse.objects.get(user=uid)
+            removeUser.delete()
+        else:
+            if(self.checkRejectedList(str(data['user']), userID)):
+                #here will go the code for user to be added to blacklist DB 
+                #also need to ask professor if we should block the ip from using the site
+                pass
+            else:
+                #added to rejeceted DB if rejected the first time
+                rejected = RejectedUser.objects.create(user=str(data['user']), rejectedUserID=userID)
+                rejected.save()
+                #user account gets deleted if the first time being rejected
+                user.delete()
+    
+    def checkRejectedList(self, username, userID):
+        try:
+            RejectedUser.objects.get(user=username)
+        except ObjectDoesNotExist:
+            return False
+        return True

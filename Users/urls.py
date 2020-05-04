@@ -1,7 +1,6 @@
 from django.urls import path, include
 from .views import (
     NewUserFormView,
-    ProfileView
 )
 from django.contrib.auth import views
 

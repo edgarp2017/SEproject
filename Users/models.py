@@ -34,6 +34,7 @@ class AcceptedUser(models.Model):
 
 class RejectedUser(models.Model):
     user = models.CharField(max_length=50)
+    #rejectedUserID = models.IntegerField(null=True)
 
     def __str__(self):
         return self.user
