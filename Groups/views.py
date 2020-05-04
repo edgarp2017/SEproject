@@ -35,32 +35,8 @@ def create(request):
             g.owner = request.user
             g.save()
             messages.success(request, 'Group created Successfully!')
-            return render(request, 'teamup/makegroup.html', {'form':form})
+            #return render(request, 'teamup/makegroup.html', {'form':form})
+            return redirect('/create')
     else:
         form = GroupForm()
         return render(request, 'teamup/makegroup.html', {'form':form})
-
-# def create(request):
-
-#     form = GroupForm(request.POST)
-#     if form.is_valid():
-#         owner = form.save(commit=False)
-#         owner.save()
-#         #form.ApplicationInfo(user)
-#         return redirect('/groups')
-#     return render(request, 'teamup/makegroup.html', {'form': form})
-
-# def create(request):
-#     if request.method == 'POST':
-#         form = GroupForm(request.POST)
-#         if form.is_valid():
-#             g:MyGroup = form.save(commit=False)
-#             o = User.object.get(username=request.user)
-#             g.owner = request.user
-#             g.save()
-#             message.success(request, 'Group created')
-#             return render(request, 'teamup/makegroup.html', {'form':form})
-
-#     else:
-#         form = GroupForm()
-#         return render(request, 'teamup/makegroup.html', {'form':form})
