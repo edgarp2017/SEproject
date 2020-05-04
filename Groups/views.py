@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 from .forms import GroupForm
 from .models import MyGroup
@@ -27,13 +30,37 @@ def create(request):
     if request.method == 'POST':
         form = GroupForm(request.POST)
         if form.is_valid():
-            g:MyGroup = form.save(commit=False)
-            o = User.object.get(username=request.user)
+            g: MyGroup = form.save(commit=False)
+            o = User.objects.get(username=request.user)
             g.owner = request.user
             g.save()
-            message.success(request, 'Group created')
+            messages.success(request, 'Group created Successfully!')
             return render(request, 'teamup/makegroup.html', {'form':form})
-
     else:
         form = GroupForm()
         return render(request, 'teamup/makegroup.html', {'form':form})
+
+# def create(request):
+
+#     form = GroupForm(request.POST)
+#     if form.is_valid():
+#         owner = form.save(commit=False)
+#         owner.save()
+#         #form.ApplicationInfo(user)
+#         return redirect('/groups')
+#     return render(request, 'teamup/makegroup.html', {'form': form})
+
+# def create(request):
+#     if request.method == 'POST':
+#         form = GroupForm(request.POST)
+#         if form.is_valid():
+#             g:MyGroup = form.save(commit=False)
+#             o = User.object.get(username=request.user)
+#             g.owner = request.user
+#             g.save()
+#             message.success(request, 'Group created')
+#             return render(request, 'teamup/makegroup.html', {'form':form})
+
+#     else:
+#         form = GroupForm()
+#         return render(request, 'teamup/makegroup.html', {'form':form})

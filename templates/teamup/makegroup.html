@@ -8,6 +8,13 @@
 
 <form method="post" class="col-lg-6 offset-lg-3">
   {% csrf_token %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success" role="alert">
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
   {% for field in form %}
       <div class="row justify-content-center">
         <div class="form-group">

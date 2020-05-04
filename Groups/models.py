@@ -11,7 +11,7 @@ class MyGroup(models.Model):
     groupName= models.CharField(max_length=100, null=False, blank=False, default=None)
 
     def __str__(self):
-        return self.owner.groupName
+        return self.owner.username
 
 
 #class Meetup(models.Model):
