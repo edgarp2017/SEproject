@@ -47,6 +47,7 @@ class NewUserForm(forms.Form):
         data = self.cleaned_data
         user = User.objects.get(username=data['user'])
         userID = User.objects.get(username=data['user']).pk
+        removeUser = UsersWaitingResponse.objects.get(user=userID)
 
         if data['response'] == '1':
             #enable the account for it can login
@@ -56,21 +57,22 @@ class NewUserForm(forms.Form):
             accept = AcceptedUser.objects.create(user=user)
 
             #remove from UsersWaitingResponse 
-            removeUser = UsersWaitingResponse.objects.get(user=uid)
             removeUser.delete()
         else:
-            if(self.checkRejectedList(str(data['user']), userID)):
+            if(self.checkRejectedList(str(data['user']))):
                 #here will go the code for user to be added to blacklist DB 
                 #also need to ask professor if we should block the ip from using the site
+                #just removes user from waiting list for now
+                removeUser.delete()
                 pass
             else:
                 #added to rejeceted DB if rejected the first time
-                rejected = RejectedUser.objects.create(user=str(data['user']), rejectedUserID=userID)
+                rejected = RejectedUser.objects.create(user=str(data['user']))
                 rejected.save()
                 #user account gets deleted if the first time being rejected
                 user.delete()
     
-    def checkRejectedList(self, username, userID):
+    def checkRejectedList(self, username):
         try:
             RejectedUser.objects.get(user=username)
         except ObjectDoesNotExist:
