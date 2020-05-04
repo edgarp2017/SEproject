@@ -18,3 +18,6 @@ def login(request):
 
 def signup(request):
     return render(request, 'Users/signup.html', {'title': 'signup'})
+
+def create(request):
+    return render(request, 'teamup/makegroup.html', {'title': 'makegroup'})
