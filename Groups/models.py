@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Group(models.Model):
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     groupName= models.CharField(max_length=100, null=False, blank=False, default=None, unique=True)
     purpose = models.CharField(max_length=254, null=False, blank=True, default=None)
 
@@ -29,5 +30,5 @@ class Vote(models.Model):
     #user = models.ManyToManyField(User)
     user_vote = models.IntegerField(choices=VOTE_CHOICES)
     #group = models.OneToOneField(MyGroup, on_delete=models.CASCADE)
-    #user_vote_on = models.OneToOneField(User, on_delete=models.CASCADE) 
+    #user_vote_on = models.OneToOneField(User, on_delete=models.CASCADE)
 

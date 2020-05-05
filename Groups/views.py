@@ -25,8 +25,9 @@ def create(request):
             o = User.objects.get(username=request.user)
             g.owner = request.user
             g.save()
+            gm: member = GroupMember(group=Group.objects.get(groupName=g.groupName), member=request.user)
+            gm.save()
             messages.success(request, 'Group created Successfully!')
-            #return render(request, 'teamup/makegroup.html', {'form':form})
             return redirect('/create')
     else:
         form = GroupForm()
