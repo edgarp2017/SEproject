@@ -4,6 +4,13 @@
 {% block content %}
   <link rel="stylesheet" type="text/css" href="{% static 'groups/main.css' %}">
 
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-primary" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
   <!-- Page Content -->
   <div class="container">
 

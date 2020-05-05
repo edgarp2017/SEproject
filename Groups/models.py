@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Group(models.Model):
-    groupName= models.CharField(max_length=100, null=False, blank=False, default=None)
+    groupName= models.CharField(max_length=100, null=False, blank=False, default=None, unique=True)
     purpose = models.CharField(max_length=254, null=False, blank=True, default=None)
 
     def __str__(self):

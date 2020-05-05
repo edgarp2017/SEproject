@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 class ApplicationForm(forms.ModelForm):
-    reference = forms.ModelChoiceField(queryset=User.objects.all())
+    reference = forms.ModelChoiceField(queryset=AcceptedUser.objects.all().filter(is_SU=False))
     class Meta:
         model = Application
         fields = [
@@ -21,6 +21,15 @@ class ApplicationForm(forms.ModelForm):
             'credential',
             'reference',
         ]
+
+    def checkBlackList(self):
+        '''This function checks if Application has been rejected before'''
+        data = self.cleaned_data
+        try:
+            BlackList.objects.get(email=data['email'])
+        except ObjectDoesNotExist:
+            return False
+        return True
 
 class AcceptRejectForm(forms.Form):
     application = forms.ModelChoiceField(queryset=Application.objects.all())

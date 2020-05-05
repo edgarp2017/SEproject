@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from Users.models import AcceptedUser
 from .form import InitialReputation 
+from django.contrib import messages
     
 @login_required(login_url="/login")
 def Profile(request):
@@ -26,6 +27,11 @@ class LoginView(views.LoginView):
 def ApplicationView(request):
     form = ApplicationForm(request.POST)
     if form.is_valid():
+        if (form.checkBlackList()):
+            #if user is BlackListed 
+            messages.success(request, 'Application Failed, You are Black Listed!')
+            return redirect('/')
         application = form.save()
+        messages.success(request, 'Application Submited!')
         return redirect('/')
     return render(request, 'application.html', {'form': form})
