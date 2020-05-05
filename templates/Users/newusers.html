@@ -27,8 +27,10 @@
                 </div>
                 <form action="" method="post">
                     {% csrf_token %}
-                    {{ form.application }}
-                    {{ form.response }}
+                    application: {{ form.application }}
+                    response: {{ form.response }}
+                    username: {{ form.username }}
+                    password: {{ form.password }}
                     <input class="btn btn-primary" type="submit" value= "Submit"> 
                 </form>
             {% else %}

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import views
-from django.contrib.auth.models import User
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AcceptRejectForm
@@ -14,7 +13,7 @@ class NewUserFormView(LoginRequiredMixin, FormView):
     redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
-        form.acceptRejectFunction()
+        form.getChoice()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

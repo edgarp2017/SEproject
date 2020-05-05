@@ -1,14 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Application(models.Model):
+    email = models.EmailField(max_length=254, null=False)
     firstName = models.CharField(max_length=50, null=False)
     lastName = models.CharField(max_length=50, null=False)
-    email = models.EmailField(max_length=254, null=False)
-    interest = models.TextField(null=False)
-    credential = models.TextField(null=False)
+    interest = models.CharField(max_length=100, null=False)
+    credential = models.CharField(max_length=100, null=False)
     reference = models.CharField(max_length=50, null=False)
 
     def __str__(self):
@@ -24,10 +23,15 @@ class AcceptedUser(models.Model):
     def __str__(self):
         return self.user.username
 
-class RejectedUser(models.Model):
-    user = models.CharField(max_length=50)
-    #rejectedUserID = models.IntegerField(null=True)
+class BlackList(models.Model):
+    email = models.EmailField(max_length=254, null=False)
     
     def __str__(self):
-        return self.user
+        return self.email
+
+class RejectedUser(models.Model):
+    email = models.EmailField(max_length=254, null=False)
+    
+    def __str__(self):
+        return self.email
         

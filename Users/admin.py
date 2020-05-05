@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Application, AcceptedUser, RejectedUser
+from .models import Application, AcceptedUser, BlackList
 
 admin.site.register(Application)
-
 admin.site.register(AcceptedUser)
-admin.site.register(RejectedUser)
+admin.site.register(BlackList)
