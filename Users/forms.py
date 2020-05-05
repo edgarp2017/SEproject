@@ -4,9 +4,13 @@ from django.contrib.auth.models import User
 from .models import Application, AcceptedUser, RejectedUser, BlackList
 from .choices import RESPONSE_CHOICES
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+from django.db import IntegrityError
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 class ApplicationForm(forms.ModelForm):
-    reference = forms.ModelChoiceField(queryset=AcceptedUser.objects.all().filter(is_SU=False))
+    reference = forms.ModelChoiceField(queryset=User.objects.all())
     class Meta:
         model = Application
         fields = [
@@ -35,20 +39,30 @@ class AcceptRejectForm(forms.Form):
     def getChoice(self):
         data = self.cleaned_data
         application = data['application']
-        email, ref = application.getEmail(), application.getReference()
+        email = application.getEmail()
 
         if data['response'] == "1":
-            self.acceptApplication(data['username'], data['password'], email, ref)
+            self.acceptApplication(data['username'], data['password'], email)
         else:
             self.rejectApplication(email)
 
-    def acceptApplication(self, username, password, email, ref):
+    def acceptApplication(self, username, password, email):
         '''Will email username and password also create user and accepteduser'''
-        user = User.objects.create_user(username, password=password, email=email)
-        user.save()
-        AcceptedUser.objects.create(user=user, reference=ref)
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("User already exists!")  #ouput to page that the user already exists
 
-        #send out email if accepted
+        else:
+            user = User.objects.create_user(username, password=password, email=email)
+            user.save()
+            AcceptedUser.objects.create(user=user)
+            status = 'new user was created'
+
+            #send out email if accepted
+            html_message = render_to_string('AcceptEmail.html', {'username': username, 'password':password})
+            plain_message = strip_tags(html_message)
+            
+            send_mail('Welcome to TeamUp', plain_message, 'sender@example.com', [email], html_message=html_message) #action of sending email
+     
         
     def rejectApplication(self, email):
         '''Function will handle rejection of application
