@@ -17,6 +17,24 @@
         {% if user.accepteduser.is_SU %}
             <div class="">Role: SU</div>
         {% endif %}
+
+        {% if ref %}
+            <h3>New Users that got accepted with you as a reference</h3>
+            {% for users in ref %}
+                <ul>
+                    <li>{{ users.user }}</li>
+                </ul>
+            {% endfor %}
+            <h4>Give an initial reputation score </h4>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.user }}
+                {{ form.score }}
+                <input class="btn btn-primary" type="submit" value= "Submit"> 
+            </form>
+
+        {% endif %}
     </div>
 
 {% endblock %}

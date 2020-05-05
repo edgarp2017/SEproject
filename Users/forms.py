@@ -6,7 +6,7 @@ from .choices import RESPONSE_CHOICES
 from django.core.exceptions import ObjectDoesNotExist
 
 class ApplicationForm(forms.ModelForm):
-    reference = forms.ModelChoiceField(queryset=User.objects.all())
+    reference = forms.ModelChoiceField(queryset=AcceptedUser.objects.all().filter(is_SU=False))
     class Meta:
         model = Application
         fields = [
@@ -35,18 +35,18 @@ class AcceptRejectForm(forms.Form):
     def getChoice(self):
         data = self.cleaned_data
         application = data['application']
-        email = application.getEmail()
+        email, ref = application.getEmail(), application.getReference()
 
         if data['response'] == "1":
-            self.acceptApplication(data['username'], data['password'], email)
+            self.acceptApplication(data['username'], data['password'], email, ref)
         else:
             self.rejectApplication(email)
 
-    def acceptApplication(self, username, password, email):
+    def acceptApplication(self, username, password, email, ref):
         '''Will email username and password also create user and accepteduser'''
         user = User.objects.create_user(username, password=password, email=email)
         user.save()
-        AcceptedUser.objects.create(user=user)
+        AcceptedUser.objects.create(user=user, reference=ref)
 
         #send out email if accepted
         
