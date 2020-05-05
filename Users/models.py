@@ -13,6 +13,15 @@ class Application(models.Model):
     def __str__(self):
         return self.firstName+ ' ' + self.lastName
 
+    def getEmail(self):
+        return self.email
+
+    def getfirstName(self):
+        return self.firstName
+
+    def getlastName(self):
+        return self.lastName
+
 class AcceptedUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_OU = models.BooleanField(default=True)

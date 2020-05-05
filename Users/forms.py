@@ -34,7 +34,9 @@ class AcceptRejectForm(forms.Form):
     
     def getChoice(self):
         data = self.cleaned_data
-        email = "" #Have to find a way to get the email from the application
+        application = data['application']
+        email = application.getEmail()
+
         if data['response'] == "1":
             self.acceptApplication(data['username'], data['password'], email)
         else:
@@ -42,7 +44,7 @@ class AcceptRejectForm(forms.Form):
 
     def acceptApplication(self, username, password, email):
         '''Will email username and password also create user and accepteduser'''
-        user = User.objects.create_user(username, password=password)
+        user = User.objects.create_user(username, password=password, email=email)
         user.save()
         AcceptedUser.objects.create(user=user)
 
@@ -52,21 +54,18 @@ class AcceptRejectForm(forms.Form):
         '''Function will handle rejection of application
         if it is first time it will be added to rejected DB
         otherwise added to Blacklist DB'''
-        if(self.checkRejected()):
-            addUserBlackList()
+        if(self.checkRejected(email)):
+            #adds to blacklist only if it was rejected before
+            BlackList.objects.create(email=email)
         else:
-            pass
-            #RejectedUser.objects.create(email)
+            RejectedUser.objects.create(email=email)
+
         
 
-    def addUserBlackList(self):
-        '''Adds email to black list user won't be able to apply anymore '''
-        pass
-
-    def checkRejected(self):
+    def checkRejected(self, email):
         '''This function checks if Application has been rejected before'''
         try:
-            RejectedUser.objects.get(user=username)
+            RejectedUser.objects.get(email=email)
         except ObjectDoesNotExist:
             return False
         return True
