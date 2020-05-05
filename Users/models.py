@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from Groups.models import Group
 
 class Application(models.Model):
     email = models.EmailField(max_length=254, null=False)
@@ -32,6 +33,7 @@ class AcceptedUser(models.Model):
     rep_score = models.IntegerField(default=0)
     reference = models.CharField(max_length=50, null=True)
     init_rep = models.BooleanField(default=False)
+    #groups = models.ManytoManyField(Group)
 
     def __str__(self):
         return self.user.username

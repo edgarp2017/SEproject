@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from .forms import GroupForm
-from .models import MyGroup
+from .models import Group
 
 
 def home(request):

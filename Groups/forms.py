@@ -1,11 +1,9 @@
 from django import forms
 from django.forms import ModelForm
-from .models import MyGroup
+from .models import Group
 
 class GroupForm(ModelForm):
-    groupName = forms.CharField(max_length=100)
-    purpose = forms.CharField(widget=forms.Textarea)
-
     class Meta:
-        model = MyGroup
-        fields = ['purpose', 'groupName']
+        model = Group
+        fields = ['groupName',
+            'purpose']
