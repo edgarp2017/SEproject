@@ -3,7 +3,7 @@
 {% block content %}
   <div class="col-sm-10 offset-sm-1 text-center">
     <h3 class="display-10">TeamUp Login</h3>
-    <a href="{% url 'Signup' %}">Don't have an account? Click here to Signup!</a>
+    <a href="{% url 'Apply' %}">Don't have an account? Click here to Signup!</a>
     {% if form.errors %}
     <p style="color: red">Your username and password didn't match. Please try again.</p>
   {% endif %}

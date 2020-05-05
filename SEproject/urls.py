@@ -4,15 +4,15 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
 from .views import (
-    SignUpView,
     LoginView,
-    Profile
+    Profile,
+    ApplicationView
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Groups.urls', namespace='Groups')),
-    path('signup/', SignUpView, name="Signup"), 
+    path('apply/', ApplicationView, name="Apply"),
     path('login/', LoginView.as_view(), name="Login"), 
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='Logout'),
     path('profile/', Profile, name='Profile'),

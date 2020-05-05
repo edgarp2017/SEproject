@@ -5,11 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-
 from .forms import GroupForm
 from .models import MyGroup
-
-# Create your views here.
 
 
 def home(request):
@@ -19,13 +16,7 @@ def home(request):
 def groups(request):
     return render(request, 'teamup/settings.html', {'title': 'settings'})
 
-
-def login(request):
-    return render(request, 'Users/login.html', {'title': 'login'})
-
-def signup(request):
-    return render(request, 'Users/signup.html', {'title': 'signup'})
-
+@login_required(login_url="/login")
 def create(request):
     if request.method == 'POST':
         form = GroupForm(request.POST)

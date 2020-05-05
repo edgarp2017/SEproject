@@ -52,7 +52,7 @@
               <a class="nav-link" href="{% url 'Login' %}">Login</a>
             </li>
             <li class="{% if request.resolver_match.url_name == "Signup" %}active{% endif %}">
-              <a class="nav-link" href="{% url 'Signup' %}">signUp</a>
+              <a class="nav-link" href="{% url 'Apply' %}">Apply</a>
             </li>
           {% endif %}
           {% if user.is_authenticated %}
@@ -73,7 +73,7 @@
     </div>
   </nav>
 
-    <!-- Optional JavaScript -->
+    
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -81,13 +81,13 @@
 
     {% block content %}
     {% endblock %}
-
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; TeamUp! 2020</p>
-      </div>
-      <!-- /.container -->
-    </footer>
+    <!-- Footer commented out for now 
+      <footer class="py-5 bg-dark">
+        <div class="container">
+          <p class="m-0 text-center text-white">Copyright &copy; TeamUp! 2020</p>
+        </div>
+      </footer>
+    -->
 </body>
 </html>
 

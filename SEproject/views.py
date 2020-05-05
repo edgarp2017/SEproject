@@ -1,18 +1,8 @@
-from Users.forms import SignUpForm
+from Users.forms import ApplicationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import views
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
-def SignUpView(request):
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-        user = form.save(commit=False)
-        user.is_active = False
-        user.save()
-        form.ApplicationInfo(user)
-        return redirect('/')
-    return render(request, 'signup.html', {'form': form})
     
 @login_required(login_url="/login")
 def Profile(request):
@@ -21,3 +11,10 @@ def Profile(request):
 
 class LoginView(views.LoginView):
     template_name = 'login.html'
+
+def ApplicationView(request):
+    form = ApplicationForm(request.POST)
+    if form.is_valid():
+        application = form.save()
+        return redirect('/')
+    return render(request, 'application.html', {'form': form})

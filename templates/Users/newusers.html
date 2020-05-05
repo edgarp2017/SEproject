@@ -4,22 +4,22 @@
 {% block content %}
     {% if user.is_authenticated %}
         {% if user.accepteduser.is_SU %}
-            {% if usersWaiting %}
+            {% if applications %}
                 <h1> Hello {{ user.accepteduser }}!</h1>
                 <div class="row">
-                    {% for user in users %}
+                    {% for user in applications %}
                         <div class="col-sm-2">
                             <div class="card text-center">
                                 <div class="card-header">
-                                    <p>User: {{ user.application }} </p>
+                                    <p>application: {{ user }} </p>
                                 </div>
                                 <div class="card-text">
-                                    <p>Email: {{ user.application.email }}</p>
-                                    <p>First Name: {{ user.application.firstName }}</p>
-                                    <p>Last Name: {{ user.application.lastName }}</p>
-                                    <p>Interest: {{ user.application.interest }}</p>
-                                    <p>Credential: {{ user.application.credential }}</p>
-                                    <p>Reference: {{ user.application.reference }}</p>
+                                    <p>Email: {{ user.email }}</p>
+                                    <p>First Name: {{ user.firstName }}</p>
+                                    <p>Last Name: {{ user.lastName }}</p>
+                                    <p>Interest: {{ user.interest }}</p>
+                                    <p>Credential: {{ user.credential }}</p>
+                                    <p>Reference: {{ user.reference }}</p>
                                 </div>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                 </div>
                 <form action="" method="post">
                     {% csrf_token %}
-                    {{ form.user }}
+                    {{ form.application }}
                     {{ form.response }}
                     <input class="btn btn-primary" type="submit" value= "Submit"> 
                 </form>
