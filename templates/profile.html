@@ -36,5 +36,11 @@
 
         {% endif %}
     </div>
+    {% if groups %}
+        <h4>your groups!</h4>
+        {% for group in groups %}
+            {{ group.group }}
+        {% endfor %}
+    {% endif %}
 
 {% endblock %}

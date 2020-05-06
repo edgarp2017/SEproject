@@ -23,13 +23,23 @@ class ApplicationForm(forms.ModelForm):
         ]
 
     def checkBlackList(self):
-        '''This function checks if Application has been rejected before'''
+        '''This function checks if email is black listed'''
         data = self.cleaned_data
         try:
             BlackList.objects.get(email=data['email'])
         except ObjectDoesNotExist:
             return False
         return True
+
+    def checkApplicationExist(self):
+        '''This function checks if the email has already applied and is waitng for response'''
+        data = self.cleaned_data
+        try:
+            Application.objects.get(email=data['email'])
+        except ObjectDoesNotExist:
+            return False
+        return True
+
 
 class AcceptRejectForm(forms.Form):
     application = forms.ModelChoiceField(queryset=Application.objects.all())
