@@ -20,7 +20,10 @@ def Profile(request):
     role = user.getRole()
 
     if form.is_valid():
-        form.save(role)
+        if( form.save(role) ):
+            messages.success(request, "Success, Rep was given to user!")
+        else:
+            messages.success(request, "Input must be 0-10 if you're OU and 0-20 if you're VIP!")
         return redirect('/profile/')
         
     return render(request, 'profile.html', {'User': request.user, 'ref': ref, 'form': form, 'groups':groups, 'invites':invites })

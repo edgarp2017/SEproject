@@ -23,14 +23,18 @@ def create(request):
     if request.method == 'POST':
         form = GroupForm(request.POST)
         if form.is_valid():
-            g: MyGroup = form.save(commit=False)
-            g.owner = request.user
-            g.slug = g.groupName
-            g.save()
-            gm: member = GroupMember(group=Group.objects.get(groupName=g.groupName), member=request.user)
-            gm.save()
-            messages.success(request, 'Group created Successfully!')
-            return redirect('/create')
+            if(form.checkExist()):
+                messages.success(request, 'Group already created!')
+                return redirect('/create')
+            else:
+                group = form.save(commit=False)
+                group.owner = request.user
+                group.slug = group.groupName
+                group.save()
+                groupmember = GroupMember(group=Group.objects.get(groupName=group.groupName), member=request.user)
+                groupmember.save()
+                messages.success(request, 'Group created Successfully!')
+                return redirect('/groups')
     else:
         form = GroupForm()
         return render(request, 'teamup/makegroup.html', {'form':form})

@@ -19,13 +19,18 @@ class InitialReputationForm(forms.Form):
     def save(self, role):
         data = self.cleaned_data
         user = data['users']
+
         if role == 'OU':
             if ((data['score'] >= 0) and (data['score'] <= 10)):     
                 user.updateRep(data['score'])
-                user.repGiven()
+                user.updateReference()
                 user.save()
+                return True
         else:
             if ((data['score'] >= 0) and (data['score'] <= 20)):     
                 user.updateRep(data['score'])
-                user.repGiven()
+                user.updateReference()
                 user.save()
+                return True
+                
+        return False
