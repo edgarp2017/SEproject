@@ -2,6 +2,13 @@
 {% load static %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-primary" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
     <p>{{ user.username }} </p>
     <div class="">
         <p>Email: {{ user.application.email }}</p>
