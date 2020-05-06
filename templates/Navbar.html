@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'groups/main.css' %}">
 
     {% if title %}
-        <title>Django Blog - {{ title }}</title>
+        <title>TeamUp - {{ title }}</title>
     {% else %}
         <title>Django Blog</title>
     {% endif  %}
@@ -33,20 +33,6 @@
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          {% if user.is_authenticated %}
-          <li class="{% if request.resolver_match.url_name == "groups" %}active{% endif %}">
-            <a class="nav-link" href="{% url 'Groups:groups' %}">Groups
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          {% endif %}
-          {% if user.is_authenticated %}
-          <li class="{% if request.resolver_match.url_name == "makegroup" %}active{% endif %}">
-            <a class="nav-link" href="{% url 'Groups:makegroup' %}">Create group
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          {% endif %}
           {% if not user.is_authenticated %}
             <li class="{% if request.resolver_match.url_name == "Login" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Login' %}">Login</a>
@@ -56,6 +42,11 @@
             </li>
           {% endif %}
           {% if user.is_authenticated %}
+            <li class="{% if request.resolver_match.url_name == "groups" %}active{% endif %}">
+              <a class="nav-link" href="{% url 'Groups:groups' %}">Groups
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
             {% if user.accepteduser.is_SU %}
               <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
                 <a class="nav-link" href="{% url 'Users:new_users' %}">New Applications</a>

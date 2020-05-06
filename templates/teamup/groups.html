@@ -1,0 +1,13 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+    <a class="nav-link" href="{% url 'Groups:makegroup' %}">Click Here To make your own group!</a>
+    {% for group in groups %}
+        <div>
+            {{ group }}
+            Owner: {{ group.owner }}
+            Name: {{ group.groupName }}
+            purpose: {{ group.purpose }}
+        </div>
+    {% endfor %}
+{% endblock %}

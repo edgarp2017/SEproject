@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from Users.models import AcceptedUser
 from .form import InitialReputation 
 from django.contrib import messages
-from Groups.models import GroupMember
+from Groups.models import GroupMember, InviteUser
     
 @login_required(login_url="/login")
 def Profile(request):
@@ -15,13 +15,13 @@ def Profile(request):
     user = AcceptedUser.objects.get(user=request.user)
     groups = GroupMember.objects.all().filter(member=request.user)
     role = user.getRole()
-    print(groups)
+    invites = InviteUser.objects.all().filter(sent_to=request.user)
 
     if form.is_valid():
         form.save(role)
         return redirect('/profile/')
         
-    return render(request, 'profile.html', {'User': request.user, 'ref': ref, 'form': form, 'groups':groups })
+    return render(request, 'profile.html', {'User': request.user, 'ref': ref, 'form': form, 'groups':groups, 'invites':invites })
 
 class LoginView(views.LoginView):
     template_name = 'login.html'

@@ -41,6 +41,8 @@
         {% for group in groups %}
             {{ group.group }}
         {% endfor %}
+    {% else %}
+        <h5>you are not in any groups!</h5>
     {% endif %}
 
 {% endblock %}

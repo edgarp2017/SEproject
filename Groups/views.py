@@ -14,7 +14,8 @@ def home(request):
 
 @login_required(login_url="/login")
 def groups(request):
-    return render(request, 'teamup/settings.html', {'title': 'settings'})
+    groups = Group.objects.all()
+    return render(request, 'teamup/groups.html', {'title': 'groups', 'groups': groups})
 
 @login_required(login_url="/login")
 def create(request):
