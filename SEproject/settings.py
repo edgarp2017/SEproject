@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Users',
     'Groups',
     'Poll',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
