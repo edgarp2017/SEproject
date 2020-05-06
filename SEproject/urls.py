@@ -12,8 +12,9 @@ from .views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Groups.urls', namespace='Groups')),
+    path('', include('Poll.urls', namespace='Poll')),
     path('apply/', ApplicationView, name="Apply"),
-    path('login/', LoginView.as_view(), name="Login"), 
+    path('login/', LoginView.as_view(), name="Login"),
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='Logout'),
     path('profile/', Profile, name='Profile'),
     path('user/', include('Users.urls', namespace='Users')),
