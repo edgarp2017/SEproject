@@ -8,6 +8,7 @@
             Owner: {{ group.owner }}
             Name: {{ group.groupName }}
             purpose: {{ group.purpose }}
+            <a href="{% url 'Groups:group_detail' group.slug  %}" class="btn btn-primary">Read More &rarr;</a>
         </div>
     {% endfor %}
 {% endblock %}

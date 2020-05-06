@@ -5,6 +5,7 @@ class Group(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     groupName= models.CharField(max_length=100, null=False, blank=False, default=None)
     purpose = models.CharField(max_length=254, null=False, blank=True, default=None)
+    slug = models.SlugField(max_length=200, unique=True)
 
     def __str__(self):
         return self.groupName

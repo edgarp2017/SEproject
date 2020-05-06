@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.views import generic
 
 from .forms import GroupForm
 from .models import Group, GroupMember
@@ -23,8 +24,8 @@ def create(request):
         form = GroupForm(request.POST)
         if form.is_valid():
             g: MyGroup = form.save(commit=False)
-            o = User.objects.get(username=request.user)
             g.owner = request.user
+            g.slug = g.groupName
             g.save()
             gm: member = GroupMember(group=Group.objects.get(groupName=g.groupName), member=request.user)
             gm.save()
@@ -33,3 +34,13 @@ def create(request):
     else:
         form = GroupForm()
         return render(request, 'teamup/makegroup.html', {'form':form})
+
+class GroupDetail(generic.DetailView):
+    model = Group
+    template_name = 'teamup/groupdetail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['members'] = GroupMember.objects.all()
+        return context
+

@@ -1,0 +1,32 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3">
+      <h2 class="my-4">{{ object.groupName }} Members</h2>
+      <div class="list-group d-inline">
+        {% for member in members %}
+           
+            <div class="list-group-item">{{ member.member }}</div>
+        {% endfor %}
+
+        <br>
+
+        <button type="button" class="btn btn-outline-primary mb-3" >Start Vote</button>
+        <button type="button" class="btn btn-outline-primary mb-3" >Leave Group</button>
+
+      </div>
+    </div>
+    <div class="col-lg-9 project-descr">
+      <h4 class="my-text">
+        Group's purpose: 
+      </h4>
+      <p>{{ object.purpose }}</p>
+    </div>
+  </div>
+  </div>    
+</div>
+
+{% endblock %}
