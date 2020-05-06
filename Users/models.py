@@ -41,8 +41,8 @@ class AcceptedUser(models.Model):
     def updateRep(self, amount):
         self.rep_score += amount
     
-    def init_repGiven(self):
-        self.init_rep = True
+    def repGiven(self):
+        self.reference = None
 
     def getRole(self):
         if self.is_OU:
