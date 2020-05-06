@@ -5,17 +5,17 @@ from django.http import HttpResponse
 #     print("hello")
 #     return render(request, 'login.html', {'title': 'Home'})
 def poll(request):
-    contest = {}
-    return render(request, 'Navbar.html' context)
-
-def create(request):
-    contest = {}
+    context = {}
     return render(request, 'Navbar.html', context)
 
+def create(request):
+    context = {}
+    return render(request, 'poll/create.html', context)
+
 def vote(request, poll_id):
-    contest = {}
+    context = {}
     return render(request, 'Navbar.html', context)
 
 def result(request, poll_id):
-    contest = {}
+    context = {}
     return render(request, 'Navbar.html', context)
