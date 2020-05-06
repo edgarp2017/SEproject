@@ -4,5 +4,18 @@ from django.http import HttpResponse
 # def test(request):
 #     print("hello")
 #     return render(request, 'login.html', {'title': 'Home'})
-def home(request):
-    return render(request, 'Navbar.html')
+def poll(request):
+    contest = {}
+    return render(request, 'Navbar.html' context)
+
+def create(request):
+    contest = {}
+    return render(request, 'Navbar.html', context)
+
+def vote(request, poll_id):
+    contest = {}
+    return render(request, 'Navbar.html', context)
+
+def result(request, poll_id):
+    contest = {}
+    return render(request, 'Navbar.html', context)

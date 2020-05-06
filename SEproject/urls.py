@@ -9,10 +9,15 @@ from .views import (
     ApplicationView
 )
 
+from Poll import views as poll_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Groups.urls', namespace='Groups')),
-    path('', include('Poll.urls', namespace='Poll')),
+    path('poll/', poll_views.poll, name='Poll'),
+    path('create/', poll_views.create, name='Create'),
+    path('vote/', poll_views.vote, name='Vote'),
+    path('result/', poll_views.result, name='Result'),
     path('apply/', ApplicationView, name="Apply"),
     path('login/', LoginView.as_view(), name="Login"),
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='Logout'),
