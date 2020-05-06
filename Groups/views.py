@@ -41,6 +41,6 @@ class GroupDetail(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['members'] = GroupMember.objects.all()
+        context['members'] = GroupMember.objects.all().filter(group=self.object)
         return context
 
