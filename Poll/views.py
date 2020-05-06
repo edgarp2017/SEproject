@@ -6,7 +6,7 @@ from django.http import HttpResponse
 #     return render(request, 'login.html', {'title': 'Home'})
 def poll(request):
     context = {}
-    return render(request, 'Navbar.html', context)
+    return render(request, 'poll/pollhome.html', context)
 
 def create(request):
     context = {}
