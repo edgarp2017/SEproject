@@ -14,7 +14,7 @@
 
             <form action="" method="post">
                 {% csrf_token %}
-                {{ form.users }}
+                {{ form.user }}
                 {{ form.score }}
                 <input class="btn btn-primary" type="submit" value= "Submit"> 
             </form>
@@ -74,7 +74,7 @@
 
                         <p>
                             
-                            <i class="glyphicon glyphicon-envelope"></i>{{ user.application.email }}
+                            <i class="glyphicon glyphicon-envelope"></i>{{ user.email }}
                             <br /></small>
                         </p>
                         <!-- Split button -->
