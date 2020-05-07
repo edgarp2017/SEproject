@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Groups.models import Group
 
 class Application(models.Model):
     email = models.EmailField(max_length=254, null=False)

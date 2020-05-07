@@ -8,5 +8,5 @@ urlpatterns = [
     path('groups/', views.groups, name='groups'),
     path('create/', views.create, name='makegroup'),
     path('groups/<slug:slug>/', views.GroupDetail.as_view(), name='group_detail'),
-    path('post', views.PostFormView, name='post'),
+    path('invite', views.InviteUserFormView, name='invite'),
 ]

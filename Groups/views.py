@@ -5,14 +5,15 @@ from django.contrib import messages
 from django.views import generic
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import GroupForm, PostForm
-from .models import Group, GroupMember, Post
+from .forms import GroupForm, InviteUserForm
+from .models import Group, GroupMember
 from Users.models import AcceptedUser
+from Post.models import Post
 
 
 def home(request):
     users = AcceptedUser.objects.filter(is_OU=True).order_by('-rep_score')[:3]
-    groups = Group.objects.all()
+    groups = Group.objects.all()[:3]
     superUsers =  AcceptedUser.objects.filter(is_SU=True)
     return render(request, 'teamup/home.html', {'title': 'Home', 'users': users, 'groups': groups, 'superUsers': superUsers})
 
@@ -43,13 +44,25 @@ def create(request):
         return render(request, 'teamup/makegroup.html', {'form':form})
 
 @login_required(login_url="/login")
-def PostFormView(request):
-    form = PostForm(request.POST, request=request.user)
+def InviteUserFormView(request):
+    form = InviteUserForm(request.POST, request=request.user)
     if form.is_valid():
-        post = form.save()
-        messages.success(request, 'Success!')
-        return redirect('/groups')
-    return render(request, 'teamup/post.html', {'form': form})
+
+        if form.checkMember():
+            messages.success(request, 'User is in that group!')
+            return redirect('/invite')
+        else:
+            if form.checkInviteExist():
+                messages.success(request, 'Someone Invited that user already!')
+                return redirect('/invite')
+            else:    
+                invite = form.save(commit=False)
+                invite.sent_by = request.user
+                invite.save()
+                messages.success(request, 'Success!')
+                return redirect('/groups')
+
+    return render(request, 'teamup/invite.html', {'form': form})
 
 
 class GroupDetail(generic.DetailView):

@@ -1,12 +1,12 @@
 from django import forms
-from django.forms import ModelForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Group, InviteUser, Post, GroupMember
+from .models import Group, InviteUser, GroupMember
 from Users.models import AcceptedUser
 from .taboo import words
 
-class GroupForm(ModelForm):
+class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ['groupName',
@@ -21,47 +21,35 @@ class GroupForm(ModelForm):
         return True
 
 
-class GroupInviteForm(ModelForm):
+class InviteUserForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.user = kwargs.pop('request')
+        super(InviteUserForm, self).__init__(*args,**kwargs)
+
+        self.fields['group'].queryset = Group.objects.filter(groupName__in=list(GroupMember.objects.filter(member=self.user)))
+        self.fields['sent_to'].queryset = User.objects.exclude(username=self.user)
+
+    group = forms.ModelChoiceField(queryset=None)
+
     class Meta:
         model = InviteUser
         fields = [
+            'group',
             'sent_to',
         ]
 
-class PostForm(forms.Form):
-    def __init__(self,*args,**kwargs):
-        self.user = kwargs.pop('request')
-        super(PostForm, self).__init__(*args,**kwargs)
-        self.fields['group'].queryset = GroupMember.objects.filter(member=self.user)
+    def checkMember(self):
+        data = self.cleaned_data
+        try:
+            GroupMember.objects.get(group=data['group'], member=data['sent_to'])
+        except ObjectDoesNotExist:
+            return False
+        return True
 
-    group = forms.ModelChoiceField(queryset=None)
-    title = forms.CharField(max_length=50)
-    desc = forms.CharField(max_length=200, widget=forms.Textarea)
-
-    class Meta:
-        model = Post
-        widgets = { 'desc': forms.TextInput(attrs={'size': 80})}
-        fields = [
-            'group',
-            'title',
-            'desc'
-        ]
-
-    def save(self):
-        data = self.cleaned_data   
-        checkedString = ""
-        tabooWord = False
-
-        for word in data['desc'].split():
-            if word in words:
-                checkedString += "*** "
-                tabooWord = True
-            else:
-                checkedString += (word + " ")
-
-        Post.objects.create(group=data['group'].group, title=data['title'], desc=checkedString)
-
-        if(tabooWord):
-            user = AcceptedUser.objects.get(user=self.user)
-            user.updateRep(-1)
-            user.save()
+    def checkInviteExist(self):
+        data = self.cleaned_data
+        try:
+            InviteUser.objects.get(group=data['group'], sent_to=data['sent_to'])
+        except ObjectDoesNotExist:
+            return False
+        return True

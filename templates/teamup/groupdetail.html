@@ -6,6 +6,9 @@
   <div class="row">
     <div class="col-lg-3">
       <h2 class="my-4">{{ object.groupName }} Members</h2>
+      <button type="button" class="btn btn-outline-primary mb-2" >
+        <a href="{% url 'Groups:invite' %}">Invite Members</a>
+      </button>
       <div class="list-group d-inline">
         {% for member in members %}
            
@@ -24,15 +27,24 @@
         Group's purpose: 
       </h4>
       <p>{{ object.purpose }}</p>
-
+      
       <h4 class="my-text">
         Group Member Post:
+        <button type="button" class="btn btn-outline-primary mb-2" >
+          <a href="{% url 'Post:post' %}">Create Post</a>
+        </button>
       </h4>
       {% for post in posts %}
         <div class="col-lg-9 project-descr">
-          <h4 class="my-text">{{ post.title }}</h4>
-          <p>{{ post.desc }}</p>
-        </div>
+          <div class="card h-100">
+            <div class="card-body">
+              <h4 class="card-title">{{ post.title }}</h4>
+              <p class="card-text">{{ post.desc }}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted">Posted By: {{ post.user }}</small>
+            </div>
+          </div>
       {% endfor %}
     </div>
 

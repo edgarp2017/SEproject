@@ -14,6 +14,7 @@ from Poll import views as poll_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Groups.urls', namespace='Groups')),
+    path('post/', include('Post.urls', namespace='Post')),
     path('poll/', poll_views.poll, name='Poll'),
     path('create_poll/', poll_views.create, name='Create'),
     path('vote<poll_id>/', poll_views.vote, name='Vote'),

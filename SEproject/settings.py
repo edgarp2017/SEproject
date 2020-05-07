@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'Users',
     'Groups',
     'Poll',
+    'Voting',
+    'Post',
     'widget_tweaks',
 ]
 
