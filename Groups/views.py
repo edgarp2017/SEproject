@@ -11,9 +11,10 @@ from Users.models import AcceptedUser
 
 
 def home(request):
-    users = AcceptedUser.objects.all()
+    users = AcceptedUser.objects.filter(is_OU=True).order_by('-rep_score')[:3]
     groups = Group.objects.all()
-    return render(request, 'teamup/home.html', {'title': 'Home', 'users': users, 'groups': groups})
+    superUsers =  AcceptedUser.objects.filter(is_SU=True)
+    return render(request, 'teamup/home.html', {'title': 'Home', 'users': users, 'groups': groups, 'superUsers': superUsers})
 
 @login_required(login_url="/login")
 def groups(request):

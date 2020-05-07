@@ -1,9 +1,9 @@
 {% extends 'Navbar.html' %}
 {% load static %}
-
+ 
 {% block content %}
   <link rel="stylesheet" type="text/css" href="{% static 'groups/main.css' %}">
-
+ 
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-primary" role="alert">
@@ -14,7 +14,7 @@
   <!-- Page Content -->
   <div class="container">
       <!-- /.col-lg-3 -->
-
+ 
       <div class="col-lg-11">
         <h2>Top Groups</h2>
         <div class="row">
@@ -33,7 +33,7 @@
             </div>
           {% endfor %}
         </div>
-
+ 
         <!--<div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -61,7 +61,7 @@
           </a>
         </div>-->
         
-        <h2>Top Users</h2>
+        <h2>Top Ordinary Users</h2>
         <div class="row">
           {% for user in users %}
             <div class="col-lg-4 col-md-6 mb-4">
@@ -71,15 +71,7 @@
                   <h4 class="card-title">
                     <a href="#">{{ user.user }}</a>
                   </h4>
-                  {% if user.is_OU %}
-                    <h5>role : OU</h5>
-                  {% endif %}
-                  {% if user.is_VIP %}
-                    <h5>role : VIP</h5>
-                  {% endif %}
-                  {% if user.is_SU %}
-                    <h5>role : SU</h5>
-                  {% endif %}
+                  <h5>role : OU</h5>
                   <p class="card-text">{{ group.purpose }}</p>
                 </div>
                 <div class="card-footer">
@@ -89,19 +81,42 @@
             </div>
           {% endfor %}
         </div>
-
-
+ 
+        <h2>Super Users</h2>
+        <div class="row">
+          {% for user in superUsers %}
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="#">{{ user.user }}</a>
+                  </h4>
+                  <h5>role : SU</h5>
+                  <p class="card-text">{{ group.purpose }}</p>
+                </div>
+                <div class="card-footer">
+                  <small class="text-muted">User rating: {{ user.rep_score }}</small>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+ 
+ 
         </div>
         <!-- /.row -->
-
+ 
       </div>
       <!-- /.col-lg-9 -->
-
+ 
     </div>
     <!-- /.row -->
-
+ 
   </div>
   <!-- /.container -->
-
+ 
 {% endblock %}
-
+ 
+ 
+ 
