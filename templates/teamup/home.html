@@ -13,24 +13,28 @@
   {% endif %}
   <!-- Page Content -->
   <div class="container">
-
-    <div class="row">
-
-      <div class="col-lg-3">
-
-        <h1 class="my-4">Top Groups</h1>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Group 1</a>
-          <a href="#" class="list-group-item">Group 2</a>
-          <a href="#" class="list-group-item">Group 3</a>
-        </div>
-
-      </div>
       <!-- /.col-lg-3 -->
 
-      <div class="col-lg-9">
+      <div class="col-lg-11">
+        <h2>Top Groups</h2>
+        <div class="row">
+          {% for group in groups %}
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="#">Name: {{ group.groupName }}</a>
+                  </h4>
+                  <h5>Owner: {{ group.owner }}</h5>
+                  <p class="card-text">{{ group.purpose }}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
 
-        <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+        <!--<div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -55,57 +59,36 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
-        </div>
-
+        </div>-->
+        
+        <h2>Top Users</h2>
         <div class="row">
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Group 1</a>
-                </h4>
-                <h5>Group Owner</h5>
-                <p class="card-text">Purpose of the group</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">User rating: &#9733; &#9733; &#9733; &#9733; &#9734;</small>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Group 2</a>
-                </h4>
-                <h5>Group 2 Owner</h5>
-                <p class="card-text">Purpose of the group</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted"> User rating: &#9733; &#9733; &#9733; &#9733; &#9734;</small>
+          {% for user in users %}
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="#">{{ user.user }}</a>
+                  </h4>
+                  {% if user.is_OU %}
+                    <h5>role : OU</h5>
+                  {% endif %}
+                  {% if user.is_VIP %}
+                    <h5>role : VIP</h5>
+                  {% endif %}
+                  {% if user.is_SU %}
+                    <h5>role : SU</h5>
+                  {% endif %}
+                  <p class="card-text">{{ group.purpose }}</p>
+                </div>
+                <div class="card-footer">
+                  <small class="text-muted">User rating: {{ user.rep_score }}</small>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">Group 3</a>
-                </h4>
-                <h5>Group 3 Owner</h5>
-                <p class="card-text">Content of Group 3</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">User rating: &#9733; &#9733; &#9733; &#9733; &#9733;</small>
-              </div>
-            </div>
-          </div>
+          {% endfor %}
+        </div>
 
 
         </div>

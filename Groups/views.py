@@ -7,10 +7,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import GroupForm, PostForm
 from .models import Group, GroupMember, Post
+from Users.models import AcceptedUser
 
 
 def home(request):
-    return render(request, 'teamup/home.html', {'title': 'Home'})
+    users = AcceptedUser.objects.all()
+    groups = Group.objects.all()
+    return render(request, 'teamup/home.html', {'title': 'Home', 'users': users, 'groups': groups})
 
 @login_required(login_url="/login")
 def groups(request):
