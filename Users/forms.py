@@ -1,13 +1,14 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Application, AcceptedUser, RejectedUser, BlackList
-from .choices import RESPONSE_CHOICES
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
+from .models import Application, AcceptedUser, RejectedUser, BlackList
+from .choices import RESPONSE_CHOICES
 
 class ApplicationForm(forms.ModelForm):
     reference = forms.ModelChoiceField(queryset=AcceptedUser.objects.all().filter(is_SU=False))

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'SEproject',
     'Users',
     'Groups',
+    'Poll',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -3,22 +3,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import views
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from Users.models import AcceptedUser
-from .form import InitialReputation 
 from django.contrib import messages
+
+from Users.models import AcceptedUser
+from .form import InitialReputationForm 
 from Groups.models import GroupMember, InviteUser
     
 @login_required(login_url="/login")
 def Profile(request):
-    ref = AcceptedUser.objects.all().filter(reference=request.user, init_rep=False)
-    form = InitialReputation(request.POST)
-    user = AcceptedUser.objects.get(user=request.user)
+    ref = AcceptedUser.objects.all().filter(reference=request.user)
     groups = GroupMember.objects.all().filter(member=request.user)
-    role = user.getRole()
     invites = InviteUser.objects.all().filter(sent_to=request.user)
+    user = AcceptedUser.objects.get(user=request.user)
+
+    form = InitialReputationForm(request.POST, request=user)
+    role = user.getRole()
 
     if form.is_valid():
-        form.save(role)
+        if( form.save(role) ):
+            messages.success(request, "Success, Rep was given to user!")
+        else:
+            messages.success(request, "Input must be 0-10 if you're OU and 0-20 if you're VIP!")
         return redirect('/profile/')
         
     return render(request, 'profile.html', {'User': request.user, 'ref': ref, 'form': form, 'groups':groups, 'invites':invites })

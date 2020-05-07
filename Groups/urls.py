@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('groups/', views.groups, name='groups'),
     path('create/', views.create, name='makegroup'),
-    path('/<slug:slug>/', views.GroupDetail.as_view(), name='group_detail'),
+    path('groups/<slug:slug>/', views.GroupDetail.as_view(), name='group_detail'),
+    path('post', views.PostFormView, name='post'),
 ]

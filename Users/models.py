@@ -32,8 +32,6 @@ class AcceptedUser(models.Model):
     is_SU = models.BooleanField(default=False)
     rep_score = models.IntegerField(default=0)
     reference = models.CharField(max_length=50, null=True)
-    init_rep = models.BooleanField(default=False)
-    #groups = models.ManytoManyField(Group)
 
     def __str__(self):
         return self.user.username
@@ -41,8 +39,8 @@ class AcceptedUser(models.Model):
     def updateRep(self, amount):
         self.rep_score += amount
     
-    def init_repGiven(self):
-        self.init_rep = True
+    def updateReference(self):
+        self.reference = None
 
     def getRole(self):
         if self.is_OU:
