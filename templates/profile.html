@@ -2,28 +2,6 @@
 {% load static %}
 
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-primary" role="alert">
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
-    <p>{{ user.username }} </p>
-    <div class="">
-        <p>Email: {{ user.application.email }}</p>
-        <p>First Name: {{ user.application.firstName }} </p>
-        <p>Last Name: {{ user.application.lastName }} </p>
-        <p>Rep Score: {{ user.accepteduser.rep_score }}</p>
-        {% if user.accepteduser.is_OU %}
-            <div class="">Role: OU</div>
-        {% endif %}
-        {% if user.accepteduser.is_VIP %}
-            <div class="">Role: OU</div>
-        {% endif %}
-        {% if user.accepteduser.is_SU %}
-            <div class="">Role: SU</div>
-        {% endif %}
 
         {% if ref %}
             <h3>New Users that got accepted with you as a reference</h3>
@@ -36,20 +14,89 @@
 
             <form action="" method="post">
                 {% csrf_token %}
-                {{ form.users }}
+                {{ form.user }}
                 {{ form.score }}
                 <input class="btn btn-primary" type="submit" value= "Submit"> 
             </form>
 
         {% endif %}
-    </div>
-    {% if groups %}
-        <h4>your groups!</h4>
-        {% for group in groups %}
-            {{ group.group }}
-        {% endfor %}
-    {% else %}
-        <h5>you are not in any groups!</h5>
-    {% endif %}
+    
 
-{% endblock %}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class=".container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h5>
+                            <p>User Name: {{ user.username }} </p>
+                            <p>Name: {{ user.application.firstName }} {{ user.application.lastName }} </p>
+            
+                            <p>
+                                {% if user.accepteduser.is_OU %}
+                                <div class="">Role: OU</div>
+                                {% endif %}
+                                {% if user.accepteduser.is_VIP %}
+                                <div class="">Role: OU</div>
+                                {% endif %}
+                                {% if user.accepteduser.is_SU %}
+                                <div class="">Role: SU</div>
+                                {% endif %}
+                            </p>
+                        
+                            {% if groups %}
+                            <div class=""> Group:
+                                {% for group in groups %}
+                                    {{ group.group }}
+                                {% endfor %}
+                            {% else %}
+                                No group assigned.
+                            </div>
+                            {% endif %}
+                        </h5>
+                        <h5>
+                            <p>Rep Score: {{ user.accepteduser.rep_score }}</p>
+                            <p>Interest: {{ user.accepteduser.interest }}</p>
+                        </h5>
+
+                        <small>
+                            <cite title="New York, USA">City College of New York, 
+                                <br />New York, USA <i class="glyphicon glyphicon-map-marker"></i>
+                            </cite>
+
+                        <p>
+                            
+                            <i class="glyphicon glyphicon-envelope"></i>{{ user.email }}
+                            <br /></small>
+                        </p>
+                        <!-- Split button -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">
+                                Contact</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span><span class="sr-only">Contact</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                
+                                <li><a href="#">Twitter</a></li>
+                                <li><a href="https://plus.google.com/+Jquery2dotnet/posts">Google +</a></li>
+                                <li><a href="https://www.facebook.com/jquery2dotnet">Facebook</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Github</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% endblock %}
