@@ -15,7 +15,7 @@ class GroupMember(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return "%s is a member of %s" %(self.member, self.group)
+        return "%s" %self.group
 
     def getGroup(self):
         return self.group
@@ -41,3 +41,10 @@ class Vote(models.Model):
     #group = models.OneToOneField(MyGroup, on_delete=models.CASCADE)
     #user_vote_on = models.OneToOneField(User, on_delete=models.CASCADE)
 
+class Post(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50, null=False)
+    desc = models.TextField(max_length=200, null=False)
+
+    def __str__(self):
+        return self.title
