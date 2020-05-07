@@ -1,0 +1,3 @@
+pip install django-widget-tweaks
+pip install django-crispy-forms
+python -m pip install Django==3.0.4
