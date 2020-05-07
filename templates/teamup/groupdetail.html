@@ -24,7 +24,18 @@
         Group's purpose: 
       </h4>
       <p>{{ object.purpose }}</p>
+
+      <h4 class="my-text">
+        Group Member Post:
+      </h4>
+      {% for post in posts %}
+        <div class="col-lg-9 project-descr">
+          <h4 class="my-text">{{ post.title }}</h4>
+          <p>{{ post.desc }}</p>
+        </div>
+      {% endfor %}
     </div>
+
   </div>
   </div>    
 </div>
