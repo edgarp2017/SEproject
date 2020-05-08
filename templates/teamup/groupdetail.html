@@ -1,43 +1,56 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-primary" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
 <div class="container">
   <div class="row">
     <div class="col-lg-3">
       <h2 class="my-4">{{ object.groupName }} Members</h2>
+      {% if member %}
       <button type="button" class="btn btn-outline-primary mb-2" >
-        <a href="{% url 'Groups:invite' %}">Invite Members</a>
+        <a href="{% url 'Groups:invite' object.slug %}">Invite Members</a>
       </button>
+      <button type="button" class="btn btn-outline-primary mb-3" >Start Vote</button>
+      <button type="button" class="btn btn-outline-primary mb-3" >Leave {{ object.groupName }}</button>
+      {% endif %}
       <div class="list-group d-inline">
         {% for member in members %}
-           
             <div class="list-group-item">{{ member.member }}</div>
         {% endfor %}
 
         <br>
 
-        <button type="button" class="btn btn-outline-primary mb-3" >Start Vote</button>
-        <button type="button" class="btn btn-outline-primary mb-3" >Leave Group</button>
-
       </div>
     </div>
     <div class="col-lg-9 project-descr">
       <h4 class="my-text">
-        Group's purpose: 
+        {{ object.groupName }}'s purpose: 
       </h4>
       <p>{{ object.purpose }}</p>
       
       <h4 class="my-text">
-        Group Member Post:
+        {{ object.groupName }} Member Post:
+        {% if member %}
         <button type="button" class="btn btn-outline-primary mb-2" >
           <a href="{% url 'Post:post' %}">Create Post</a>
         </button>
+        {% endif %}
       </h4>
       {% for post in posts %}
         <div class="col-lg-9 project-descr">
           <div class="card h-100">
-            <div class="card-body">
+            {% if member %}
+            <button type="button" class="btn btn-outline-primary mb-3" >
+              <a href="{% url 'Post:delete' post.id %}">Delete Post</a>
+            </button>
+            {% endif %}
+            <div class="card-body" >
               <h4 class="card-title">{{ post.title }}</h4>
               <p class="card-text">{{ post.desc }}</p>
             </div>
@@ -45,6 +58,7 @@
               <small class="text-muted">Posted By: {{ post.user }}</small>
             </div>
           </div>
+        </div>
       {% endfor %}
     </div>
 

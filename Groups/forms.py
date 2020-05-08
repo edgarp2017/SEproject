@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Group, InviteUser, GroupMember
 from Users.models import AcceptedUser
-from .taboo import words
 
 class GroupForm(forms.ModelForm):
     class Meta:

@@ -60,7 +60,7 @@ def InviteUserFormView(request):
                 invite.sent_by = request.user
                 invite.save()
                 messages.success(request, 'Success!')
-                return redirect('/groups')
+                return redirect('/groups/%s' %group)
 
     return render(request, 'teamup/invite.html', {'form': form})
 
@@ -72,5 +72,13 @@ class GroupDetail(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['members'] = GroupMember.objects.all().filter(group=self.object)
+        context['member'] = self.checkGroupMember()
         context['posts'] = Post.objects.filter(group=self.object)
         return context
+
+    def checkGroupMember(self):
+        try:
+            GroupMember.objects.get(group=self.object, member=self.request.user)
+        except ObjectDoesNotExist:
+            return False
+        return True

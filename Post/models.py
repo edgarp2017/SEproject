@@ -11,3 +11,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class TabooUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    word = models.CharField(max_length=50)
+
+    def __str__(self):
+        return "%s: %s" %(self.user, self.word)
