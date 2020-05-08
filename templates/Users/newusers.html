@@ -6,6 +6,13 @@
         {% if user.accepteduser.is_SU %}
             {% if applications %}
                 <h1> Hello {{ user.accepteduser }}!</h1>
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                 <div class="row">
                     {% for user in applications %}
                         <div class="col-sm-2">
@@ -34,7 +41,7 @@
                     <input class="btn btn-primary" type="submit" value= "Submit"> 
                 </form>
             {% else %}
-                <h2>No new users founds</h2>
+                <h2>There aren't any new applications</h2>
             {% endif %}
         {% else %}
             <h2>You are not a super user!</h2>

@@ -58,30 +58,32 @@ class AcceptRejectForm(forms.Form):
     def getChoice(self):
         data = self.cleaned_data
         application = data['application']
+        username = data['username']
 
         if data['response'] == "1":
-            self.acceptApplication(data['username'], data['password'], application)
+            if User.objects.filter(username=username).exists():
+                return False
+            else:
+                self.acceptApplication(data['username'], data['password'], application)
         else:
             self.rejectApplication(application.email)
 
         application.delete()
+        return True
 
     def acceptApplication(self, username, password, application):
         '''Will email username and password also create user and accepteduser'''
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("User already exists!")  #ouput to page that the user already exists
-        else:
-            user = User.objects.create_user(username, password=password, email=application.email, 
-            first_name=application.firstName, last_name=application.lastName)
-            user.save()
-            AcceptedUser.objects.create(user=user, reference=application.reference)
-            status = 'new user was created'
+        user = User.objects.create_user(username, password=password, email=application.email, 
+        first_name=application.firstName, last_name=application.lastName)
+        user.save()
+        AcceptedUser.objects.create(user=user, reference=application.reference)
+        status = 'new user was created'
 
-            #send out email if accepted
-            html_message = render_to_string('AcceptEmail.html', {'username': username, 'password':password})
-            plain_message = strip_tags(html_message)
-            
-            send_mail('Welcome to TeamUp', plain_message, 'sender@example.com', [application.email], html_message=html_message) #action of sending email
+        #send out email if accepted
+        html_message = render_to_string('AcceptEmail.html', {'username': username, 'password':password})
+        plain_message = strip_tags(html_message)
+        
+        send_mail('Welcome to TeamUp', plain_message, 'sender@example.com', [application.email], html_message=html_message) #action of sending email
      
         
     def rejectApplication(self, email):
@@ -91,8 +93,14 @@ class AcceptRejectForm(forms.Form):
         if(self.checkRejected(email)):
             #adds to blacklist only if it was rejected before
             BlackList.objects.create(email=email)
+            html_message = render_to_string('BlackListEmail.html', {})
+            plain_message = strip_tags(html_message)
+            send_mail('TeamUp: BLACKLISTED', plain_message, 'sender@example.com', [email], html_message=html_message) #action of sending email
         else:
             RejectedUser.objects.create(email=email)
+            html_message = render_to_string('RejectionEmail.html', {})
+            plain_message = strip_tags(html_message)
+            send_mail('TeamUp: Sorry', plain_message, 'sender@example.com', [email], html_message=html_message) #action of sending email
 
         
 

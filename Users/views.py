@@ -4,6 +4,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AcceptRejectForm
 from .models import Application
+from django.contrib import messages
 
 class NewUserFormView(LoginRequiredMixin, FormView):
     template_name = 'Users/newusers.html'
@@ -13,7 +14,10 @@ class NewUserFormView(LoginRequiredMixin, FormView):
     redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
-        form.getChoice()
+        if form.getChoice() == False:
+            messages.error(self.request, 'Username Already Exists!')
+            return redirect('/user/')
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
