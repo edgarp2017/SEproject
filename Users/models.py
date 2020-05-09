@@ -37,6 +37,18 @@ class AcceptedUser(models.Model):
 
     def updateRep(self, amount):
         self.rep_score += amount
+
+        if self.is_OU:
+            if self.rep_score+amount > 30:
+                self.is_OU = False
+                self.is_VIP = True
+        
+        if self.is_VIP:
+            if self.rep_score+amount < 20:
+                self.is_VIP = False
+                self.is_OU = True
+        
+
     
     def updateReference(self):
         self.reference = None
