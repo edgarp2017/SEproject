@@ -13,10 +13,8 @@
     <div class="col-lg-3">
       <h2 class="my-4">{{ object.groupName }} Members</h2>
       {% if member %}
-      <button type="button" class="btn btn-outline-primary mb-2" >
-        <a href="{% url 'Groups:invite' object.slug %}">Invite Members</a>
-      </button>
-      <button type="button" class="btn btn-outline-primary mb-3" >Start Vote</button>
+      <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:invite' %}" role="button">Invite</a>
+      <a class="btn btn-outline-primary mb-3" href="{% url 'UserVote:u_vote' %}" role="button">Start Vote</a>
       <button type="button" class="btn btn-outline-primary mb-3" >Leave {{ object.groupName }}</button>
       {% endif %}
       <div class="list-group d-inline">
@@ -30,16 +28,14 @@
     </div>
     <div class="col-lg-9 project-descr">
       <h4 class="my-text">
-        {{ object.groupName }}'s purpose: 
+        {{ object.groupName }}'s purpose:
       </h4>
       <p>{{ object.purpose }}</p>
-      
+
       <h4 class="my-text">
         {{ object.groupName }} Member Post:
         {% if member %}
-        <button type="button" class="btn btn-outline-primary mb-2" >
-          <a href="{% url 'Post:post' %}">Create Post</a>
-        </button>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'Post:post' %}" role="button">Post</a>
         {% endif %}
       </h4>
       {% for post in posts %}
@@ -63,7 +59,7 @@
     </div>
 
   </div>
-  </div>    
+  </div>
 </div>
 
 {% endblock %}
