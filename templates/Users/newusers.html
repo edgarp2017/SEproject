@@ -5,22 +5,24 @@
     {% if user.is_authenticated %}
         {% if user.accepteduser.is_SU %}
             {% if applications %}
-                <h1> Hello {{ user.accepteduser }}!</h1>
+            <p style="margin-left:40px; margin-right:50px; font-size:50px"> 
+                Hello, {{ user.accepteduser }}!</p>
                 {% if messages %}
                     {% for message in messages %}
                     <div class="alert alert-danger" role="alert">
                         {{ message }}
                     </div>
                     {% endfor %}
-                    {% endif %}
-                <div class="row">
+                {% endif %}
+                <div class="main">
                     {% for user in applications %}
                         <div class="col-sm-2">
                             <div class="card text-center">
                                 <div class="card-header">
-                                    <p>application: {{ user }} </p>
+                                    <p>applicant: {{ user }} </p>
                                 </div>
                                 <div class="card-text">
+                                    <br/>
                                     <p>Email: {{ user.email }}</p>
                                     <p>First Name: {{ user.firstName }}</p>
                                     <p>Last Name: {{ user.lastName }}</p>
@@ -31,17 +33,36 @@
                             </div>
                         </div>
                     {% endfor %}
-                </div>
+                    <br/>
                 <form action="" method="post">
+                    <p style="margin-left:20px;"> 
                     {% csrf_token %}
-                    application: {{ form.application }}
-                    response: {{ form.response }}
+                    applicant: {{ form.application }}
+                    response: {{ form.response }} <br/>
                     username: {{ form.username }}
                     password: {{ form.password }}
                     <input class="btn btn-primary" type="submit" value= "Submit"> 
                 </form>
             {% else %}
-                <h2>There aren't any new applications</h2>
+            <style>
+                .title{
+                    text-align: center;
+                    font-size:60px;
+                    font-weight : bold;
+                }
+                .main{
+                    width:1000px;
+                    margin:0 auto;
+                    margin-top:350px;
+                }
+            </style>
+            <div>
+                <div class ="main">
+                    <div class="title">
+                        New Application
+                    </div>
+                </div>
+            </div>
             {% endif %}
         {% else %}
             <h2>You are not a super user!</h2>
