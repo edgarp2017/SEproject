@@ -6,11 +6,12 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-from .models import Application, AcceptedUser, RejectedUser, BlackList
+from .models import Application, AcceptedUser, RejectedUser, BlackList, BlackBox, WhiteBox
 from .choices import RESPONSE_CHOICES
 
 class ApplicationForm(forms.ModelForm):
     reference = forms.ModelChoiceField(queryset=AcceptedUser.objects.all().filter(is_SU=False))
+    
     class Meta:
         model = Application
         fields = [
@@ -102,8 +103,6 @@ class AcceptRejectForm(forms.Form):
             plain_message = strip_tags(html_message)
             send_mail('TeamUp: Sorry', plain_message, 'sender@example.com', [email], html_message=html_message) #action of sending email
 
-        
-
     def checkRejected(self, email):
         '''This function checks if Application has been rejected before'''
         try:
@@ -111,3 +110,74 @@ class AcceptRejectForm(forms.Form):
         except ObjectDoesNotExist:
             return False
         return True
+
+class BlackBoxMessageForm(forms.Form):
+    
+    def __init__(self,*args,**kwargs):
+        self.user = kwargs.pop('request')
+        super(BlackBoxMessageForm, self).__init__(*args,**kwargs)
+
+    message = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        fields = [
+            'message'
+        ]    
+
+    def updateMessage(self):
+        data = self.cleaned_data
+
+        userBlackBox = BlackBox.objects.get(user=self.user)
+        userBlackBox.message = data['message']
+        userBlackBox.save()
+
+class AddUserBoxForm(forms.Form):
+
+    def __init__(self,*args,**kwargs):
+        self.user = kwargs.pop('request')
+        super(AddUserBoxForm, self).__init__(*args,**kwargs)
+        self.fields['user'].queryset = User.objects.filter(username__in=list(AcceptedUser.objects.filter(is_OU=True).exclude(user=self.user)))
+
+    user = forms.ModelChoiceField(queryset=None)
+
+    class Meta:
+        fields = [
+            'user'
+        ] 
+
+    def addBlackBox(self):
+        data = self.cleaned_data
+        blackBoxObject = BlackBox.objects.get(user=self.user)
+
+        if self.checkSelectedUser():
+            return False
+        else:
+            blackBoxObject.blackbox.add(data['user'])
+            blackBoxObject.save()
+            return True
+
+    def addWhiteBox(self):
+        data = self.cleaned_data
+        whiteBoxObject = WhiteBox.objects.get(user=self.user)
+        
+        if self.checkSelectedUser():
+            return False
+        else:
+            whiteBoxObject.whitebox.add(data['user'])
+            whiteBoxObject.save()
+            return True
+
+    def checkSelectedUser(self):
+        data = self.cleaned_data
+        blackBoxObject = BlackBox.objects.get(user=self.user)
+        whiteBoxObject = WhiteBox.objects.get(user=self.user)
+        blackBoxUsers = blackBoxObject.blackbox.all()
+        whiteBoxUsers = whiteBoxObject.whitebox.all()
+
+        for instance in blackBoxUsers:
+            if instance.username == data['user'].username:
+                return True
+
+        for instance in whiteBoxUsers:
+            if instance.username == data['user'].username:
+                return True

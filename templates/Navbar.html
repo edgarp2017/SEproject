@@ -15,7 +15,7 @@
     {% if title %}
         <title>TeamUp - {{ title }}</title>
     {% else %}
-        <title>Django Blog</title>
+        <title>TeamUp</title>
     {% endif  %}
 </head>
 <body>
@@ -53,6 +53,9 @@
             {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'Profile' %}">Profile</a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+              <a class="nav-link" href="{% url 'Users:black_white' %}">BlackWhiteBox</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'Logout' %}">Logout</a>

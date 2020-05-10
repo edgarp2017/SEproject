@@ -1,0 +1,41 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <a class="btn btn-outline-primary mb-3" href="{% url 'Users:white_box' %}" role="button">
+        Add To White Box
+    </a>
+    <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_box' %}" role="button">
+        Add To Black Box
+    </a>
+    <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_box_message' %}" role="button">
+        Set Message for Black Box
+    </a>
+
+    <h4>White Box</h4>
+    {% if whiteboxUsers %}
+        {% for user in whiteboxUsers %}
+            {{ user }}
+        {% endfor %}
+    {% else %}
+        <p>No Users in White Box, Go Add some!</p>
+    {% endif %}
+
+    </br>
+
+    <h4>Black Box</h4>
+    {% if blackBoxUsers %}
+        {% for user in blackBoxUsers %}
+            {{ user }}
+        {% endfor %}
+    {% else %}
+        <p>No Users in Black Box, Go Add some!</p>
+    {% endif %}
+
+{% endblock %}

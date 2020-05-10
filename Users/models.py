@@ -1,4 +1,6 @@
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
 class Application(models.Model):
@@ -39,16 +41,19 @@ class AcceptedUser(models.Model):
         self.rep_score += amount
 
         if self.is_OU:
-            if self.rep_score+amount > 30:
+            print(self.rep_score)
+            if self.rep_score > 30:
                 self.is_OU = False
                 self.is_VIP = True
-        
+            
+            if self.rep_score < 0:
+                BlackList.objects.create(email=self.user.email)
+                self.user.delete()
+                
         if self.is_VIP:
-            if self.rep_score+amount < 20:
+            if self.rep_score < 20:
                 self.is_VIP = False
                 self.is_OU = True
-        
-
     
     def updateReference(self):
         self.reference = None
@@ -72,4 +77,24 @@ class RejectedUser(models.Model):
     
     def __str__(self):
         return self.email
+
+class WhiteBox(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='WhiteBoxuser')
+    whitebox = models.ManyToManyField(User, related_name='whitebox')
+
+    def __str__(self):
+        return "%s WhiteBox" %self.user
+
+class BlackBox(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='BlackBoxuser')
+    blackbox = models.ManyToManyField(User, related_name='blackbox', default="You are in my black box.")
+    message = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "%s BlackBox" %self.user
         
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        WhiteBox.objects.create(user=instance)
+        BlackBox.objects.create(user=instance)
