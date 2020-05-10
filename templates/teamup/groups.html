@@ -9,13 +9,30 @@
         {% endfor %}
     {% endif %}
     <a class="nav-link" href="{% url 'Groups:makegroup' %}">Click Here To make your own group!</a>
+
+<style>
+    .card{
+        margin-left:50px;
+        margin-right:50px;
+        margin-top:50px;
+    }
+    .nav-link{
+        margin-left:50px;
+    }
+</style>
+<div class="row">
     {% for group in groups %}
-        <div>
-            {{ group }}
-            Owner: {{ group.owner }}
-            Name: {{ group.groupName }}
-            purpose: {{ group.purpose }}
-            <a href="{% url 'Groups:group_detail' group.slug  %}" class="btn btn-primary">Read More &rarr;</a>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="#">{{ group.groupName }} owned by <br/> {{group.owner}}</a>    
+          </h5>
+          <p class="card-text">Group Purpose: {{ group.purpose }}</p>
+          <a href="{% url 'Groups:group_detail' group.slug  %}" class="btn btn-primary">Details &rarr;</a>
         </div>
+      </div>
+    </div>
     {% endfor %}
+</div>
 {% endblock %}
