@@ -6,7 +6,7 @@ from django.views import generic
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import GroupForm, InviteUserForm
-from .models import Group, GroupMember
+from .models import Group, GroupMember, InviteUser
 from Users.models import AcceptedUser
 from Post.models import Post
 
@@ -64,6 +64,10 @@ def InviteUserFormView(request):
 
     return render(request, 'teamup/invite.html', {'form': form})
 
+@login_required(login_url="/login")
+def UserInvites(request):
+    invites = InviteUser.objects.filter(sent_to=request.user)
+    return render(request, 'teamup/userinvites.html', {'invites':invites})
 
 class GroupDetail(generic.DetailView):
     model = Group

@@ -1,0 +1,11 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+    my_invites
+    <h2>Hello</h2>
+
+    {% for invite in invites %}
+        {{ invite.group }}
+        {{ invite.sent_by }}
+    {% endfor %}
+{% endblock %}
