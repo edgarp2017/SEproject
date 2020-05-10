@@ -15,7 +15,7 @@ class GroupMember(models.Model):
     member = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return "%s" %self.group
+        return "%s" %self.member
 
     def getGroup(self):
         return self.group

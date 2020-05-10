@@ -1,0 +1,35 @@
+{% extends 'Navbar.html' %}
+
+
+{% block content %}
+
+
+
+
+
+<div class="container" id="thisone">
+
+    <h3>Select which user you will be voting for</h3>
+    <h5>{{ message }}</h5>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-group">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="poll" value="option1" required>
+                    option1
+                </label> &nbsp;
+                <label>
+                    <input type="radio" name="poll" value="option2">
+                    option2
+                </label> &nbsp;
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Vote</button>
+    </form>
+
+  </div>
+
+  {% endblock %}

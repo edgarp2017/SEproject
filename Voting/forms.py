@@ -4,13 +4,15 @@ from django.db.models import Count
 
 from Users.models import AcceptedUser
 from .models import VoteSU
+from .models import UserVote
+from Groups.models import GroupMember
 
 class VoteSUForm(forms.Form):
     def __init__(self,*args,**kwargs):
         self.user = kwargs.pop('request')
         super(VoteSUForm, self).__init__(*args,**kwargs)
         self.fields['vote_for'].queryset = AcceptedUser.objects.filter(is_VIP=True).exclude(user=self.user)
-    
+
     vote_for = forms.ModelChoiceField(queryset=None)
 
     class Meta:
@@ -43,11 +45,11 @@ class VoteSUForm(forms.Form):
 
     def checkVotes(self):
         totalVotes = 0
-        
+
         votes = VoteSU.objects.all()
         for instance in votes:
             totalVotes += instance.count
-        
+
         if AcceptedUser.objects.filter(is_VIP=True).count() == totalVotes:
             newSU = VoteSU.objects.all().order_by('-count')[0]
             user = AcceptedUser.objects.get(user=newSU.vote_for)
@@ -55,3 +57,23 @@ class VoteSUForm(forms.Form):
             user.is_SU  = True
             user.save()
 
+
+class UserVoteForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+         self.user = kwargs.pop('user',None)
+         print(self.user)
+         super(UserVoteForm, self).__init__(*args, **kwargs)
+         self.fields['voteOption'].choices = GroupMember.objects.filter(member=self.user)
+         print(GroupMember.objects.filter(member=self.user).exclude(member=self.user))
+         print(self.user)
+    voteOption = forms.MultipleChoiceField(choices=[], label='Vote Name', required=False,
+                                           widget=forms.SelectMultiple(attrs={
+                                            'class':'form-control'
+                                            }))
+    otherMember = forms.CharField(label='Somone else?', max_length=100, required=False,
+                                  widget=forms.TextInput(
+                                    attrs={
+                                    'class':'form-control',
+                                    'placeholder':'Did we miss a member?'
+                                    }))
+        #if this fails try to loop through members as [(voterName,voterName) for groupmembers in groupmember]

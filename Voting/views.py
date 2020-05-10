@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from .forms import VoteSUForm
 from .models import VoteSU
+from .models import UserVote
+from .forms import UserVoteForm
 from Users.models import AcceptedUser
 
 @login_required(login_url="/login")
@@ -28,4 +31,20 @@ def VoteSUFormView(request):
 
 @login_required(login_url="/login")
 def uservote(request):
-    return render(request,'teamup/home.html')
+    if request.method == 'POST':
+        form = UserVoteForm(request.POST)
+        if form.is_valid():
+            voteOption = form.cleaned_data.get('voteOption', [])
+            otherMember = form.clean_data.get('otherMember', '')
+        message = 'Thank you for voting!'
+    if request.method == 'GET':
+        message = ''
+
+    form = UserVoteForm()
+
+    context = {
+        'form':form,
+        'message': message
+    }
+    return render(request, 'Voting/uservote.html', context)
+
