@@ -5,7 +5,6 @@
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />
         <div class="col text-center">
-            <div class="">group: {{ form.group }}</div>
             <div class="">title: {{form.title }}</div>
             <div class="">description: {{ form.desc }}</div>
         <button type="submit" class="btn btn-primary my-1">Submit!</button>

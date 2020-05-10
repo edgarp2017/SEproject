@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Groups.models import GroupMember
 
+from Groups.models import Group
 from Users.models import AcceptedUser
 
 class VoteSU(models.Model):
@@ -20,7 +20,7 @@ class UserVote(models.Model):
     pCount = models.IntegerField(default=0)
     wCount = models.IntegerField(default=0)
     kickCount = models.IntegerField(default=0)
-    voterName = models.ForeignKey(GroupMember, on_delete=models.CASCADE, default=None)
+    voterName = models.ForeignKey(Group, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s: %d votes' % (self.voterName, self.pCount + self.wCount)

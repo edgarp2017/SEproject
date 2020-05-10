@@ -26,7 +26,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">
-            <a href="#">{{ group.groupName }} owned by <br/> {{group.owner}}</a>    
+            <a href="#">{{ group.name }} owned by <br/> {{group.owner}}</a>    
           </h5>
           <p class="card-text">Group Purpose: {{ group.purpose }}</p>
           <a href="{% url 'Groups:group_detail' group.pk  %}" class="btn btn-primary">Details &rarr;</a>

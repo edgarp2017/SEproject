@@ -7,12 +7,12 @@ from django.contrib import messages
 
 from Users.models import AcceptedUser
 from .form import InitialReputationForm 
-from Groups.models import GroupMember, InviteUser
+from Groups.models import InviteUser
     
 @login_required(login_url="/login")
 def Profile(request):
     ref = AcceptedUser.objects.all().filter(reference=request.user)
-    groups = GroupMember.objects.all().filter(member=request.user)
+    groups = None#GroupMember.objects.all().filter(member=request.user)
     invites = InviteUser.objects.all().filter(sent_to=request.user)
     user = AcceptedUser.objects.get(user=request.user)
 

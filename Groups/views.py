@@ -6,7 +6,7 @@ from django.views import generic
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import GroupForm, InviteUserForm
-from .models import Group, GroupMember, InviteUser
+from .models import Group, InviteUser
 from Users.models import AcceptedUser
 from Post.models import Post
 
@@ -17,7 +17,6 @@ def home(request):
     superUsers =  AcceptedUser.objects.filter(is_SU=True)
     return render(request, 'teamup/home.html', {'title': 'Home', 'users': users, 'groups': groups, 'superUsers': superUsers})
 
-@login_required(login_url="/login")
 def groups(request):
     groups = Group.objects.all()
     return render(request, 'teamup/groups.html', {'title': 'Groups', 'groups': groups})
@@ -33,10 +32,9 @@ def create(request):
             else:
                 group = form.save(commit=False)
                 group.owner = request.user
-                group.slug = group.groupName
                 group.save()
-                groupmember = GroupMember(group=Group.objects.get(groupName=group.groupName), member=request.user)
-                groupmember.save()
+                group.members.add(request.user)
+                group.save()
                 messages.success(request, 'Group created Successfully!')
                 return redirect('/groups')
     else:
@@ -75,14 +73,19 @@ class GroupDetail(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['members'] = GroupMember.objects.all().filter(group=self.object)
-        context['member'] = self.checkGroupMember()
+        group = Group.objects.get(name=self.object)
+        context['members'] = group.members.all()
+        context['member'] = self.checkIfMember()
         context['posts'] = Post.objects.filter(group=self.object)
         return context
 
-    def checkGroupMember(self):
-        try:
-            GroupMember.objects.get(group=self.object, member=self.request.user)
-        except ObjectDoesNotExist:
+    def checkIfMember(self):
+        if not self.request.user.is_authenticated:
             return False
-        return True
+
+        group = Group.objects.get(name=self.object)
+        members = group.members.all()
+        for member in members:
+            if self.request.user.username == member.username:
+                return True
+        return False

@@ -5,7 +5,6 @@ from django.db.models import Count
 from Users.models import AcceptedUser
 from .models import VoteSU
 from .models import UserVote
-from Groups.models import GroupMember
 
 class VoteSUForm(forms.Form):
     def __init__(self,*args,**kwargs):
@@ -57,23 +56,24 @@ class VoteSUForm(forms.Form):
             user.is_SU  = True
             user.save()
 
-
 class UserVoteForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-         self.user = kwargs.pop('user',None)
-         print(self.user)
-         super(UserVoteForm, self).__init__(*args, **kwargs)
-         self.fields['voteOption'].choices = GroupMember.objects.filter(member=self.user)
-         print(GroupMember.objects.filter(member=self.user).exclude(member=self.user))
-         print(self.user)
-    voteOption = forms.MultipleChoiceField(choices=[], label='Vote Name', required=False,
-                                           widget=forms.SelectMultiple(attrs={
-                                            'class':'form-control'
-                                            }))
-    otherMember = forms.CharField(label='Somone else?', max_length=100, required=False,
-                                  widget=forms.TextInput(
-                                    attrs={
-                                    'class':'form-control',
-                                    'placeholder':'Did we miss a member?'
-                                    }))
+    pass
+ #   '''
+  #  def __init__(self, *args, **kwargs):
+   #      self.user = kwargs.pop('user',None)
+    #     print(self.user)
+     #    super(UserVoteForm, self).__init__(*args, **kwargs)
+      #   self.fields['voteOption'].choices = GroupMember.objects.filter(member=self.user)
+       #  print(GroupMember.objects.filter(member=self.user).exclude(member=self.user))
+        # print(self.user)
+    #voteOption = forms.MultipleChoiceField(choices=[], label='Vote Name', required=False,
+       #                                    widget=forms.SelectMultiple(attrs={
+        #                                    'class':'form-control'
+         #                                   }))
+    #otherMember = forms.CharField(label='Somone else?', max_length=100, required=False,
+      #                            widget=forms.TextInput(
+     #                               attrs={
+          #                          'class':'form-control',
+       #                             'placeholder':'Did we miss a member?'
+        #                            }))
         #if this fails try to loop through members as [(voterName,voterName) for groupmembers in groupmember]

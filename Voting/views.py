@@ -3,10 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 
-from .forms import VoteSUForm
-from .models import VoteSU
-from .models import UserVote
-from .forms import UserVoteForm
+from .models import VoteSU, UserVote
+from .forms import VoteSUForm, UserVoteForm
 from Users.models import AcceptedUser
 
 @login_required(login_url="/login")
@@ -31,6 +29,7 @@ def VoteSUFormView(request):
 
 @login_required(login_url="/login")
 def uservote(request):
+    
     if request.method == 'POST':
         form = UserVoteForm(request.POST)
         if form.is_valid():
@@ -46,5 +45,6 @@ def uservote(request):
         'form':form,
         'message': message
     }
+
     return render(request, 'Voting/uservote.html', context)
 
