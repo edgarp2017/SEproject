@@ -15,18 +15,6 @@
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <div class="form-group">
-            <div class="radio">
-                <label>
-                    <input type="radio" name="poll" value="option1" required>
-                    option1
-                </label> &nbsp;
-                <label>
-                    <input type="radio" name="poll" value="option2">
-                    option2
-                </label> &nbsp;
-            </div>
-        </div>
         <button type="submit" class="btn btn-primary">Submit Vote</button>
     </form>
 

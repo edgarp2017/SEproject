@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from .models import VoteSU, UserVote
 from .forms import VoteSUForm, UserVoteForm
 from Users.models import AcceptedUser
+from Groups.models import Group
 
 @login_required(login_url="/login")
 def VoteSUFormView(request):
@@ -28,18 +29,28 @@ def VoteSUFormView(request):
     return render(request, 'Voting/voteSU.html', {'form': form})
 
 @login_required(login_url="/login")
-def uservote(request):
-    
+def uservote(request,pk):
+    group = Group.objects.get(pk=pk)
+    form = UserVoteForm(request.POST, request=request.user, group=group)
     if request.method == 'POST':
-        form = UserVoteForm(request.POST)
         if form.is_valid():
-            voteOption = form.cleaned_data.get('voteOption', [])
-            otherMember = form.clean_data.get('otherMember', '')
-        message = 'Thank you for voting!'
+            v: vote = form.save(commit=False)
+            v.group = group
+            if form.cleaned_data['voteType'] == '1':
+                v.pCount += 1
+                v.voteType = 1
+
+            if form.cleaned_data['voteType'] == '2':
+                v.wCount += 1
+                v.voteType = 2
+
+            v.save()
+            print(v.wCount)
+            message = 'Thank you for voting!'
     if request.method == 'GET':
         message = ''
 
-    form = UserVoteForm()
+    #form = UserVoteForm()
 
     context = {
         'form':form,
@@ -47,4 +58,3 @@ def uservote(request):
     }
 
     return render(request, 'Voting/uservote.html', context)
-

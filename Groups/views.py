@@ -53,7 +53,7 @@ def InviteUserFormView(request):
             if form.checkInviteExist():
                 messages.success(request, 'Someone Invited that user already!')
                 return redirect('/invite')
-            else:    
+            else:
                 invite = form.save(commit=False)
                 invite.sent_by = request.user
                 invite.save()
