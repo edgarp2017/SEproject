@@ -1,7 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from Groups.models import Group
 from Users.models import AcceptedUser
@@ -16,38 +16,6 @@ class VoteSU(models.Model):
 
     def voteGiven(self):
         self.count += 1
-
-
-class UserVote(models.Model):
-    pCount = models.IntegerField(default=0)
-    wCount = models.IntegerField(default=0)
-    kickCount = models.IntegerField(default=0)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    voteType = models.CharField(max_length=10)
-    member = models.CharField(max_length=254)
-
-    def __str__(self):
-        return '%s: %d votes' % (self.group, self.pCount + self.wCount)
-
-    def praise(self):
-        self.pCount += 1
-
-    def warn(self):
-        self.wCount += 1
-
-    #Needs refinement
-    @classmethod
-    def bulk_votes(cls, voterName):
-        with transaction.atomic():
-            for voterName in voterNames:
-                if len(voterName) == 0:
-                    continue
-
-                if UserVote.objects.filter(voterName=voterName).exist():
-                    UserVote.objects.filter(voterName=voterName).update(wCount=models.F('wCount') + 1)
-
-                else:
-                    UserVote.objects.create(voterName=voterName, count=1)
 
 class VoteType(models.Model):
     PRIASE = 'priase'
@@ -76,11 +44,12 @@ class Vote(models.Model):
     def __str__(self):
         return "%s: %s yes, %s no" %(self.vote, self.yes_count, self.no_count)
 
-    def updateYes(self):
-        self.yes_count += 1
+class WarnList(models.Model):
+    user =  models.ForeignKey(User, on_delete=models.CASCADE)
+    group =  models.ForeignKey(Group, on_delete=models.CASCADE)
 
-    def updateNo(self):
-        self.no_count += 1
+    def __str__(self):
+        return "%s has been warned in %s group" %(self.user, self.group)
 
 @receiver(post_save, sender=VoteType)
 def update_user_profile(sender, instance, created, **kwargs):

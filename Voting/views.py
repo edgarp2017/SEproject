@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 
-from .models import VoteSU, UserVote, VoteType, Vote
-from .forms import VoteSUForm, UserVoteForm, VoteTypeForm, VoteForm
+from .models import VoteSU, VoteType, Vote
+from .forms import VoteSUForm, VoteTypeForm, VoteForm
 from Users.models import AcceptedUser
 from Groups.models import Group
 
@@ -28,34 +29,48 @@ def VoteSUFormView(request):
             return redirect('/vote')
     return render(request, 'Voting/voteSU.html', {'form': form})
 
-def uservote(request,pk):
-    pass
-    return render(request, 'Voting/uservote.html')
-    
-@login_required(login_url="/login")
-def VoteFormView(request, grouppk, votepk):
-    return render(request, 'Voting/response.html', {'group': group, 'votes':votes})
-
 @login_required(login_url="/login")
 def StartVoteView(request, pk):
     group = Group.objects.get(pk=pk)
     form = VoteTypeForm(request.POST, request=request.user, group=group)
+
+    isMember = False
+    members = group.members.all()
+    for member in members:
+        if member.username == request.user.username:
+            isMember = True
+
     if form.is_valid():
-        if form.checkExist():
+        if form.checkOwner():
+            messages.success(request, 'You Can only praise a group owner!')
+            return redirect('/groups/%s/votes' %group.pk)
+        elif form.checkExist():
             messages.success(request, 'Vote Exist, Try again later!')
+            return redirect('/groups/%s/votes' %group.pk)
         else:
             startVote = form.save(commit=False)
             startVote.group = group
             startVote.save()
             messages.success(request, 'Vote Started!')
+            return redirect('/groups/%s/votes' %group.pk)
 
-    return render(request, 'Voting/start_vote.html', {'form':form})
+    return render(request, 'Voting/start_vote.html', {'form':form, 'isMember': isMember})
 
 @login_required(login_url="/login")
 def GroupMemberVoteView(request, pk):
     group = Group.objects.get(pk=pk)
-    voteTypeObject = VoteType.objects.get(group=group)
     form = VoteForm(request.POST, request=request.user, group=group)
+
+    isMember = False
+    members = group.members.all()
+    for member in members:
+        if member.username == request.user.username:
+            isMember = True
+
+    try:
+        voteTypeObject = VoteType.objects.get(group=group)
+    except ObjectDoesNotExist:
+        voteTypeObject = None
 
     if form.is_valid():
         if form.checkVoted():
@@ -69,6 +84,9 @@ def GroupMemberVoteView(request, pk):
             else:
                 voteObject.no_count += 1
             voteObject.save()
+            form.getVotes()
+            return redirect('/groups/%s' %group.pk)
+
             messages.success(request, 'Your vote has been saved!')
 
-    return render(request, 'Voting/votes.html', {'group': group, 'votes':voteTypeObject, 'form':form})
+    return render(request, 'Voting/votes.html', {'group': group, 'vote':voteTypeObject, 'form':form, 'isMember': isMember})
