@@ -33,6 +33,7 @@ def VoteSUFormView(request):
 def StartVoteView(request, pk):
     group = Group.objects.get(pk=pk)
     form = VoteTypeForm(request.POST, request=request.user, group=group)
+    print("Redirected")
 
     isMember = False
     members = group.members.all()
@@ -71,6 +72,13 @@ def GroupMemberVoteView(request, pk):
         voteTypeObject = VoteType.objects.get(group=group)
     except ObjectDoesNotExist:
         voteTypeObject = None
+
+    if not voteTypeObject == None:
+        v = Vote.objects.get(vote=voteTypeObject)
+        if v.yes_count == 0 and v.no_count == 0:
+            v.voters.add(request.user)
+
+
 
     if form.is_valid():
         if form.checkVoted():
