@@ -4,6 +4,7 @@ from .forms import CreatePollForm
 from .models import Poll
 from Groups.models import Group
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 
 def poll(request, pk):
@@ -20,7 +21,7 @@ def poll(request, pk):
 def create(request,pk):
     group = Group.objects.get(pk=pk)
     if request.method == 'POST':
-        form = CreatePollForm(request.POST)
+        form = CreatePollForm(request.POST,request=request.user, group=group)
         if form.is_valid():
             print(form.cleaned_data['question'])
             c: create = form.save(commit=False)
@@ -39,9 +40,22 @@ def create(request,pk):
 def vote(request,pk):
     group = Group.objects.get(pk=pk)
     poll = Poll.objects.get(Group=pk)
+    user = request.user
+    voted = False
+
+    voters = poll.Voter.all()
+
+    for vote in voters:
+        if vote.username == user.username:
+            voted = True
+
 
     if request.method == 'POST':
         option = request.POST['poll']
+        if voted == True:
+            messages.success(request, 'You already voted!')
+            return redirect('/groups/%s/viewpolls' %group.pk)
+
         print(request.POST['poll'])
 
         if option == 'option1':
