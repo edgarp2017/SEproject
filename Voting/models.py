@@ -1,4 +1,6 @@
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
 from Groups.models import Group
@@ -46,3 +48,41 @@ class UserVote(models.Model):
 
                 else:
                     UserVote.objects.create(voterName=voterName, count=1)
+
+class VoteType(models.Model):
+    PRIASE = 'priase'
+    WARN = 'warn'
+    KICK = 'kick'
+    TYPE = [
+        (PRIASE, 'priase'),
+        (WARN, 'warn'),
+        (KICK, 'kick')
+    ]
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote_type = models.CharField(max_length=10,
+        choices=TYPE,
+        default=PRIASE)
+
+    def __str__(self):
+        return "Vote on %s for %s" %(self.user, self.vote_type)
+
+class Vote(models.Model):
+    vote = models.OneToOneField(VoteType, on_delete=models.CASCADE)
+    yes_count = models.IntegerField(default=0)
+    no_count = models.IntegerField(default=0)
+    voters = models.ManyToManyField(User)
+
+    def __str__(self):
+        return "%s: %s yes, %s no" %(self.vote, self.yes_count, self.no_count)
+
+    def updateYes(self):
+        self.yes_count += 1
+
+    def updateNo(self):
+        self.no_count += 1
+
+@receiver(post_save, sender=VoteType)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Vote.objects.create(vote=instance)

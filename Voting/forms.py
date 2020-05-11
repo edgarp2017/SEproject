@@ -4,8 +4,7 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 from Users.models import AcceptedUser
-from .models import VoteSU
-from .models import UserVote
+from .models import VoteSU, UserVote, VoteType, Vote
 from Groups.models import Group
 
 class VoteSUForm(forms.Form):
@@ -97,3 +96,58 @@ class UserVoteForm(forms.ModelForm):
         return(data['voteType'])
 
 
+class VoteTypeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('request')
+        self.group = kwargs.pop('group')
+        super(VoteTypeForm, self).__init__(*args, **kwargs)
+        members = self.group.members.all()
+        self.fields['user'].queryset = User.objects.filter(username__in=list(members)).exclude(username=self.user)
+
+    user = forms.ModelChoiceField(queryset=None)
+    
+    class Meta:
+        model = VoteType
+        fields = [
+            'user',
+            'vote_type'
+        ]
+
+    def checkExist(self):
+        data = self.cleaned_data
+        try:
+            VoteType.objects.get(group=self.group)
+        except ObjectDoesNotExist:
+            return False
+        return True
+
+class VoteForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.group = kwargs.pop('group')
+        self.user = kwargs.pop('request')
+        super(VoteForm, self).__init__(*args, **kwargs)
+
+    CHOICES = [
+        (1, 'yes'),
+        (2, 'no')
+    ]
+    response = forms.ChoiceField(choices=CHOICES)
+    class Meta:
+        model = Vote
+        fields = [
+            'response'
+        ]
+
+    def checkVoted(self):
+        data = self.cleaned_data
+        voteObject = VoteType.objects.get(group=self.group)
+        voteResponse = Vote.objects.get(vote=voteObject)
+        voters = voteResponse.voters.all()
+        for vote in voters:
+            if vote.username == self.user.username:
+                return True
+        return False
+
+    def getResponse(self):
+        data = self.cleaned_data
+        return data['response']
