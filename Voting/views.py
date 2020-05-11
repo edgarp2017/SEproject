@@ -43,10 +43,10 @@ def StartVoteView(request, pk):
 
     if form.is_valid():
         if form.checkOwner():
-            messages.success(request, 'You Can only praise a group owner!')
+            messages.info(request, 'You Can only praise a group owner!')
             return redirect('/groups/%s/votes' %group.pk)
         elif form.checkExist():
-            messages.success(request, 'Vote Exist, Try again later!')
+            messages.error(request, 'Vote Exist, Try again later!')
             return redirect('/groups/%s/votes' %group.pk)
         else:
             startVote = form.save(commit=False)
@@ -82,7 +82,7 @@ def GroupMemberVoteView(request, pk):
 
     if form.is_valid():
         if form.checkVoted():
-            messages.success(request, 'You already voted!')
+            messages.error(request, 'You already voted!')
         else:
             voteObject = Vote.objects.get(vote=voteTypeObject)
             voteObject.voters.add(request.user)
