@@ -19,9 +19,20 @@ def poll(request, pk):
     return render(request, 'poll/pollhome.html', context)
 
 def create(request,pk):
+
+    try:
+        polls = Poll.objects.get(Group=pk)
+    except ObjectDoesNotExist:
+        polls = None
+
     group = Group.objects.get(pk=pk)
+    form = CreatePollForm(request.POST,request=request.user, group=group)
+
+    if not polls == None:
+        messages.success(request, 'There is an active poll already')
+        return redirect('/groups/%s/viewpolls' %group.pk)
+
     if request.method == 'POST':
-        form = CreatePollForm(request.POST,request=request.user, group=group)
         if form.is_valid():
             print(form.cleaned_data['question'])
             c: create = form.save(commit=False)

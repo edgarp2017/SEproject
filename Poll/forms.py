@@ -3,9 +3,10 @@ from.models import Poll
 
 class CreatePollForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.group = kwargs.pop('group')
-        self.user = kwargs.pop('request')
+        self.group = kwargs.pop('group',None)
+        self.user = kwargs.pop('request',None)
         super(CreatePollForm, self).__init__(*args, **kwargs)
+        print(self.user)
 
     class Meta:
         model = Poll
@@ -15,8 +16,3 @@ class CreatePollForm(ModelForm):
     def checkVoted(self):
         data = self.cleaned_data
         poll = Polls.objects.get(pk=group.pk)
-        voters = poll.Voter.all()
-        for vote in voters:
-            if vote.username == self.user.username:
-                return True
-        return False
