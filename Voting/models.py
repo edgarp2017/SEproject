@@ -20,10 +20,12 @@ class UserVote(models.Model):
     pCount = models.IntegerField(default=0)
     wCount = models.IntegerField(default=0)
     kickCount = models.IntegerField(default=0)
-    voterName = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    voteType = models.CharField(max_length=10)
+    member = models.CharField(max_length=254)
 
     def __str__(self):
-        return '%s: %d votes' % (self.voterName, self.pCount + self.wCount)
+        return '%s: %d votes' % (self.group, self.pCount + self.wCount)
 
     def praise(self):
         self.pCount += 1

@@ -14,7 +14,7 @@
       <h2 class="my-4">{{ object.name }} Members</h2>
       {% if member %}
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:invite' object.pk %}" role="button">Invite</a>
-      <a class="btn btn-outline-primary mb-3" href="{% url 'UserVote:u_vote' %}" role="button">Start Vote</a>
+      <a class="btn btn-outline-primary mb-3" href="{% url 'UserVote:u_vote' object.pk %}" role="button">Start Vote</a>
       <button type="button" class="btn btn-outline-primary mb-3" >Leave {{ object.name }}</button>
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:reject_messages' object.pk %}" role="button">Rejections</a>
       {% endif %}

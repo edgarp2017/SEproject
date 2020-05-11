@@ -1,10 +1,12 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 from Users.models import AcceptedUser
 from .models import VoteSU
 from .models import UserVote
+from Groups.models import Group
 
 class VoteSUForm(forms.Form):
     def __init__(self,*args,**kwargs):
@@ -56,24 +58,42 @@ class VoteSUForm(forms.Form):
             user.is_SU  = True
             user.save()
 
-class UserVoteForm(forms.Form):
-    pass
- #   '''
-  #  def __init__(self, *args, **kwargs):
-   #      self.user = kwargs.pop('user',None)
-    #     print(self.user)
-     #    super(UserVoteForm, self).__init__(*args, **kwargs)
-      #   self.fields['voteOption'].choices = GroupMember.objects.filter(member=self.user)
-       #  print(GroupMember.objects.filter(member=self.user).exclude(member=self.user))
-        # print(self.user)
-    #voteOption = forms.MultipleChoiceField(choices=[], label='Vote Name', required=False,
-       #                                    widget=forms.SelectMultiple(attrs={
-        #                                    'class':'form-control'
-         #                                   }))
-    #otherMember = forms.CharField(label='Somone else?', max_length=100, required=False,
-      #                            widget=forms.TextInput(
-     #                               attrs={
-          #                          'class':'form-control',
-       #                             'placeholder':'Did we miss a member?'
-        #                            }))
-        #if this fails try to loop through members as [(voterName,voterName) for groupmembers in groupmember]
+class UserVoteForm(forms.ModelForm):
+
+    class Meta:
+        model = UserVote
+        fields = [
+            'member',
+            'voteType',
+        ]
+
+    options = [('1', 'Praise'), ('2','Warn')]
+    member = forms.MultipleChoiceField(choices=[], label='Member Name', required=False,
+                                       widget=forms.SelectMultiple(attrs={
+                                        'class':'form-control'
+                                        }))
+
+    voteType = forms.CharField(label='Are you praising or warning?', widget=forms.RadioSelect(choices=options))
+
+
+    otherMember = forms.CharField(label='Someone else?', max_length=100, required=False,
+                                  widget=forms.TextInput(attrs={
+                                    'class':'form-control',
+                                    'placeholder':'Did we miss someone?'
+                                    }))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('request',None)
+        self.group = kwargs.pop('group',None)
+        super(UserVoteForm, self).__init__(*args, **kwargs)
+        currentGroup = Group.objects.get(name=self.group)
+        members = currentGroup.members.all()
+        currentGroupMembers = User.objects.filter(username__in=list(members)).exclude(username=self.user)
+        self.fields['member'].choices = [(member,member) for member in currentGroupMembers]
+
+
+    def checkVoteType(self):
+        data = self.cleaned_data
+        return(data['voteType'])
+
+
