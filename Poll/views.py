@@ -5,8 +5,10 @@ from .models import Poll
 from Groups.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url="/login")
 def poll(request, pk):
     group = Group.objects.get(pk=pk)
 
@@ -26,6 +28,7 @@ def poll(request, pk):
 
     return render(request, 'poll/pollhome.html', context)
 
+@login_required(login_url="/login")
 def create(request,pk):
 
     try:
@@ -46,7 +49,6 @@ def create(request,pk):
             c: create = form.save(commit=False)
             c.Group = group
             c.save()
-            c.save()
             return redirect('/groups/%s/viewpolls' %group.pk)
     else:
 
@@ -55,16 +57,19 @@ def create(request,pk):
     context = {'form':form}
     return render(request, 'poll/create.html', context)
 
+@login_required(login_url="/login")
 def vote(request,pk):
     group = Group.objects.get(pk=pk)
     poll = Poll.objects.get(Group=pk)
     user = request.user
     voted = False
+    form = CreatePollForm(request.POST)
 
     voters = poll.Voter.all()
 
     for vote in voters:
         if vote.username == user.username:
+            print(vote.username)
             voted = True
 
 
@@ -74,7 +79,7 @@ def vote(request,pk):
             messages.error(request, 'You already voted!')
             return redirect('/groups/%s/viewpolls' %group.pk)
 
-        print(request.POST['poll'])
+        poll.Voter.add(request.user)
 
         if option == 'option1':
             poll.ans_one_votes += 1
@@ -94,6 +99,7 @@ def vote(request,pk):
 
     return render(request, 'poll/vote.html', context)
 
+@login_required(login_url="/login")
 def result(request, pk):
     poll = Poll.objects.get(Group=pk)
     context = {'poll':poll}
