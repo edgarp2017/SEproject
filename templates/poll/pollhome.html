@@ -5,22 +5,20 @@
 
 {% block content %}
 
-{% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-danger" role="alert">
+{% for message in messages %}
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
     {{ message }}
   </div>
-  {% endfor %}
-{% endif %}
+{% endfor %}
 
 <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Available Polls</h3>
-                <span class="float-right">
-                    <a href="{% url 'Groups:create_poll' group.pk %}" class="btn btn-primary btn-xs">Create</a> &nbsp;
-                </span>
             </div>
             {% if polls %}
             <ul class="list-group">
@@ -36,6 +34,14 @@
 
         </div>
     </div>
+        <span class="float-right">
+            <a href="{% url 'Groups:create_poll' group.pk %}" class="btn btn-primary btn-xs">Create</a> &nbsp;
+        </span>
+        <form method="POST">
+         {% csrf_token %}
+         <span class="float-right">
+            <button type="submit" class="btn btn-info">Delete poll</button>
+         </span>
+        </form>
 </div>
 {% endblock %}
-

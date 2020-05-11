@@ -16,6 +16,14 @@ def poll(request, pk):
         polls = None
     context = {'polls':polls,
                 'group':group}
+
+    if request.method == 'POST':
+        if not polls == None:
+            polls.delete()
+            messages.success(request, "Poll has been deleted successfully")
+            return redirect('/groups/%s/viewpolls' %group.pk)
+
+
     return render(request, 'poll/pollhome.html', context)
 
 def create(request,pk):
@@ -29,7 +37,7 @@ def create(request,pk):
     form = CreatePollForm(request.POST,request=request.user, group=group)
 
     if not polls == None:
-        messages.success(request, 'There is an active poll already')
+        messages.error(request, 'There is an active poll already')
         return redirect('/groups/%s/viewpolls' %group.pk)
 
     if request.method == 'POST':
@@ -38,7 +46,6 @@ def create(request,pk):
             c: create = form.save(commit=False)
             c.Group = group
             c.save()
-            c.Voter.add(request.user)
             c.save()
             return redirect('/groups/%s/viewpolls' %group.pk)
     else:
@@ -64,7 +71,7 @@ def vote(request,pk):
     if request.method == 'POST':
         option = request.POST['poll']
         if voted == True:
-            messages.success(request, 'You already voted!')
+            messages.error(request, 'You already voted!')
             return redirect('/groups/%s/viewpolls' %group.pk)
 
         print(request.POST['poll'])
