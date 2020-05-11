@@ -8,6 +8,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Available Polls</h3>
+                <span class="float-right">
+                    <a href="{% url 'Groups:create_poll' group.pk %}" class="btn btn-primary btn-xs">Create</a> &nbsp;
+                </span>
             </div>
             {% if polls %}
             <ul class="list-group">

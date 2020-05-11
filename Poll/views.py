@@ -17,13 +17,18 @@ def poll(request, pk):
                 'group':group}
     return render(request, 'poll/pollhome.html', context)
 
-def create(request):
+def create(request,pk):
+    group = Group.objects.get(pk=pk)
     if request.method == 'POST':
         form = CreatePollForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data['question'])
-            form.save()
-            return redirect('/poll')
+            c: create = form.save(commit=False)
+            c.Group = group
+            c.save()
+            c.Voter.add(request.user)
+            c.save()
+            return redirect('/groups/%s/viewpolls' %group.pk)
     else:
 
         form = CreatePollForm()
@@ -40,7 +45,6 @@ def vote(request,pk):
         print(request.POST['poll'])
 
         if option == 'option1':
-            print("here")
             poll.ans_one_votes += 1
         elif option == 'option2':
             poll.ans_two_votes += 1

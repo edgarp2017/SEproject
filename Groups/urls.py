@@ -20,5 +20,6 @@ urlpatterns = [
     path('groups/<pk>/viewpolls', poll, name='view_polls'),
     path('groups/<pk>/viewpolls/vote', vote, name='vote_polls'),
     path('groups/<pk>/viewpolls/results', result, name='result_polls'),
+    path('groups/<pk>/viewpolls/create', create, name='create_poll'),
     path('my_invites/', views.UserInvites, name='my_invites'),
 ]
