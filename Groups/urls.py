@@ -11,6 +11,7 @@ urlpatterns = [
     path('create/', views.create, name='makegroup'),
     path('groups/<pk>', views.GroupDetail.as_view(), name='group_detail'),
     path('groups/<pk>/post', PostView, name='new_post'),
-    path('invite_user/', views.InviteUserFormView, name='invite'),
-    path('my_invites/', views.UserInvites, name='my_invites')
+    path('groups/<pk>/invite/', views.InviteUserFormView, name='invite'),
+    path('groups/<pk>/rejectmessages', views.RejectMessagesView, name='reject_messages'),
+    path('my_invites/', views.UserInvites, name='my_invites'),
 ]

@@ -2,25 +2,32 @@
 {% load static %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-        {% if ref %}
-            <h3>New Users that got accepted with you as a reference</h3>
-            {% for users in ref %}
-                <ul>
-                    <li>{{ users.user }}</li>
-                </ul>
-            {% endfor %}
-            <h4>Give an initial reputation score </h4>
+    {% if ref %}
+        <h3>New Users that got accepted with you as a reference</h3>
+        {% for users in ref %}
+            <ul>
+                <li>{{ users.user }}</li>
+            </ul>
+        {% endfor %}
+        <h4>Give an initial reputation score </h4>
 
-            <form action="" method="post">
-                {% csrf_token %}
-                {{ form.users }}
-                {{ form.score }}
-                <input class="btn btn-primary" type="submit" value= "Submit"> 
-            </form>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.users }}
+            {{ form.score }}
+            <input class="btn btn-primary" type="submit" value= "Submit"> 
+        </form>
 
-        {% endif %}
-    
+    {% endif %}
+
 
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
@@ -99,4 +106,4 @@
         </div>
     </div>
 </div>
-    {% endblock %}
+{% endblock %}

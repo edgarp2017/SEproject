@@ -19,8 +19,8 @@ The following **required** functionality is completed:
 - [x] OUs can accept or reject the invite
 - [x] User can sign in
 - [x] User can log out
-- [ ] An OU can put some OU's on his/her whitebox to accept invites automatically(**Being worked on**)
-- [ ] An OU can put some OU's on his/her blackbox to reject invites automatically(**Being worked on**)
+- [x] An OU can put some OU's on his/her whitebox to accept invites automatically
+- [x] An OU can put some OU's on his/her blackbox to reject invites automatically
 - [x] Once a group is form a web-page is made available that is accessible to all group members
 - [x] All group members can moderate or post to the group page
 - [x] All group members can create polls to set up a meeting time or vote on other things
