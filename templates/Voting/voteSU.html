@@ -10,15 +10,21 @@
     {% endif %}
 
     <form method="post">
-        <div class="col text-center">
-            <h4>Vote for A Super user !</h4>
-        </div>
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
-        <div class="col text-center">
-            <div class="">Vote for: {{ form.vote_for }}</div>
-            {{ form.vote_by }}
-        <button type="submit" class="btn btn-primary my-1">Submit!</button>
+        <div class="row">
+            <div class="card mx-auto" style="width: 18rem;">
+                <img class="card-img-top" src="/media/media/vote.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h4 class="card-title">Vote for a Super user! </h4>
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <div class="col text-center">
+                        <div class="">Vote for: {{ form.vote_for }}
+                            {{ form.vote_by }}
+                            <button type="submit" class="btn btn-primary my-1">Submit!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 {% endblock %}
