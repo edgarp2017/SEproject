@@ -2,12 +2,19 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import CreatePollForm
 from .models import Poll
+from Groups.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 
 
-def poll(request):
-    polls = Poll.objects.all()
-    form = CreatePollForm()
-    context = {'polls':polls}
+def poll(request, pk):
+    group = Group.objects.get(pk=pk)
+
+    try:
+        polls = Poll.objects.get(Group=pk)
+    except ObjectDoesNotExist:
+        polls = None
+    context = {'polls':polls,
+                'group':group}
     return render(request, 'poll/pollhome.html', context)
 
 def create(request):
@@ -24,8 +31,9 @@ def create(request):
     context = {'form':form}
     return render(request, 'poll/create.html', context)
 
-def vote(request, poll_id):
-    poll = Poll.objects.get(pk=poll_id)
+def vote(request,pk):
+    group = Group.objects.get(pk=pk)
+    poll = Poll.objects.get(Group=pk)
 
     if request.method == 'POST':
         option = request.POST['poll']
@@ -43,12 +51,14 @@ def vote(request, poll_id):
 
         poll.save()
 
-        return redirect('Result',poll.id)
+        return redirect('/groups/%s/viewpolls' %group.pk)
 
-    context = {'poll':poll}
+    context = {'poll':poll,
+                'group':group}
+
     return render(request, 'poll/vote.html', context)
 
-def result(request, poll_id):
-    poll = Poll.objects.get(pk=poll_id)
+def result(request, pk):
+    poll = Poll.objects.get(Group=pk)
     context = {'poll':poll}
     return render(request, 'poll/result.html', context)
