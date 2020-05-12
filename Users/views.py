@@ -20,6 +20,7 @@ class NewUserFormView(LoginRequiredMixin, FormView):
         if not user.is_SU:
             messages.error(self.request, 'You are not a SU!')
             return redirect('/')
+        return super(NewUserFormView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         if form.getChoice() == False:

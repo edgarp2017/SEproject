@@ -15,6 +15,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Groups.urls', namespace='Groups')),
     path('', include('Voting.urls', namespace='UserVote')),
+    path('', include('actions.urls', namespace='actions')),
     path('post/', include('Post.urls', namespace='Post')),
     path('vote/', include('Voting.urls', namespace='Voting')),
     path('poll/', poll_views.poll, name='Poll'),
