@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Group, InviteUser, RejectedInviteMessage
 from Users.models import AcceptedUser, WhiteBox, BlackBox
+from Post.models import Post
 
 class GroupForm(forms.ModelForm):
     class Meta:
@@ -78,3 +79,36 @@ class InviteUserForm(forms.ModelForm):
         except ObjectDoesNotExist:
             return False
         return True
+
+class InviteResponseForm(forms.Form):
+    RESPONSE_CHOICES = [
+        (1,'Accept'),
+        (2, 'Reject'),
+    ]
+
+    def __init__(self,*args,**kwargs):
+        self.user = kwargs.pop('request')
+        self.group = kwargs.pop('group')
+        self.invite = kwargs.pop('invite')
+        super(InviteResponseForm, self).__init__(*args,**kwargs)
+
+    response = forms.ChoiceField(choices=RESPONSE_CHOICES)
+    message = forms.CharField()
+
+    class Meta:
+        fields = [
+            'response',
+            'message'
+        ]
+    
+    def saveAction(self):
+        data = self.cleaned_data
+        if data['response'] == '1':
+            self.group.members.add(self.user)
+            self.group.save()
+            return True
+        else:
+            Post.objects.create(group=self.group, title="Invitation Rejected",
+            desc="%s rejected invitation for %s group. The message the user send is %s. The invitation was sent by %s"
+            %(self.user, self.group, data['message'], self.invite.sent_by), user=self.user)
+            return False
