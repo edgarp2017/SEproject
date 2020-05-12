@@ -8,8 +8,13 @@ class ActionForm(forms.Form):
     #your_name = forms.CharField(label='Your name', max_length=100)
     def __init__(self,*args,**kwargs):
         self.request= kwargs.pop('request')
-        super(ActionForm, self).__init__(*args,**kwargs)    
-        self.fields['username'].queryset = AcceptedUser.objects.exclude(user = self.request.user).filter(is_SU=False)
+        super(ActionForm, self).__init__(*args,**kwargs)
+        try: 
+            self.fields['username'].queryset = AcceptedUser.objects.exclude(user = self.request.user).filter(is_SU=False)
+        except:
+            self.fields['username'].queryset = AcceptedUser.objects.filter(is_SU=False)
+        
+        
 
     # Use any form fields you need, CharField for simplicity reasons
     username = forms.ModelChoiceField(queryset=None,required=False)
@@ -29,7 +34,6 @@ class ActionForm(forms.Form):
             'lastName',
             'email'
        ]
-
 
     def compliment(self):
         data = self.cleaned_data
