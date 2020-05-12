@@ -1,11 +1,42 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-    my_invites
-    <h2>Hello</h2>
 
-    {% for invite in invites %}
-        {{ invite.group }}
-        {{ invite.sent_by }}
-    {% endfor %}
+    {% if invites %}
+        {% for invite in invites %}
+            <div class="card w-50">
+                <div class="card-body">
+                <h5 class="card-title bold text-center font-weight-bold">Invite for Group: {{ invite.group }}</h5>
+                <p class="card-text"><b>Group's purpose:</b> {{ invite.group.purpose }} 
+                    </br>Sent By: {{ invite.sent_by }}
+                </p>
+                <div class="col text-center">
+                    <a href="{% url 'Groups:group_detail' invite.group.pk  %}" class="btn btn-primary">View Group</a>
+                    <a href="{% url 'Groups:group_detail' invite.group.pk  %}" class="btn btn-primary">Accept or Reject</a>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <style>
+            .title{
+                text-align: center;
+                font-size:60px;
+                font-weight : bold;
+            }
+            .main{
+                width:1000px;
+                margin:0 auto;
+                margin-top:350px;
+            }
+        </style>
+        <div>
+            <div class ="main">
+                <div class="title">
+                    No New Invites
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 {% endblock %}

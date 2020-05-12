@@ -1,5 +1,7 @@
 from django.db import models
+from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from Groups.models import Group
 from Users.models import AcceptedUser
@@ -15,32 +17,41 @@ class VoteSU(models.Model):
     def voteGiven(self):
         self.count += 1
 
-
-class UserVote(models.Model):
-    pCount = models.IntegerField(default=0)
-    wCount = models.IntegerField(default=0)
-    kickCount = models.IntegerField(default=0)
-    voterName = models.ForeignKey(Group, on_delete=models.CASCADE)
+class VoteType(models.Model):
+    PRIASE = 'priase'
+    WARN = 'warn'
+    KICK = 'kick'
+    TYPE = [
+        (PRIASE, 'priase'),
+        (WARN, 'warn'),
+        (KICK, 'kick')
+    ]
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote_type = models.CharField(max_length=10,
+        choices=TYPE,
+        default=PRIASE)
 
     def __str__(self):
-        return '%s: %d votes' % (self.voterName, self.pCount + self.wCount)
+        return "Vote on %s for %s" %(self.user, self.vote_type)
 
-    def praise(self):
-        self.pCount += 1
+class Vote(models.Model):
+    vote = models.OneToOneField(VoteType, on_delete=models.CASCADE)
+    yes_count = models.IntegerField(default=0)
+    no_count = models.IntegerField(default=0)
+    voters = models.ManyToManyField(User)
 
-    def warn(self):
-        self.wCount += 1
+    def __str__(self):
+        return "%s: %s yes, %s no" %(self.vote, self.yes_count, self.no_count)
 
-    #Needs refinement
-    @classmethod
-    def bulk_votes(cls, voterName):
-        with transaction.atomic():
-            for voterName in voterNames:
-                if len(voterName) == 0:
-                    continue
+class WarnList(models.Model):
+    user =  models.ForeignKey(User, on_delete=models.CASCADE)
+    group =  models.ForeignKey(Group, on_delete=models.CASCADE)
 
-                if UserVote.objects.filter(voterName=voterName).exist():
-                    UserVote.objects.filter(voterName=voterName).update(wCount=models.F('wCount') + 1)
+    def __str__(self):
+        return "%s has been warned in %s group" %(self.user, self.group)
 
-                else:
-                    UserVote.objects.create(voterName=voterName, count=1)
+@receiver(post_save, sender=VoteType)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Vote.objects.create(vote=instance)

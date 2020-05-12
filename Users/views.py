@@ -26,7 +26,6 @@ class NewUserFormView(LoginRequiredMixin, FormView):
         if form.getChoice() == False:
             messages.error(self.request, 'Username Already Exists!')
             return redirect('/user/')
-
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

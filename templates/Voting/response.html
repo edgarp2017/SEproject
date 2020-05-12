@@ -1,0 +1,13 @@
+{% extends 'Navbar.html' %}
+ 
+{% block content %}
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+            {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

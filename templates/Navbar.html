@@ -46,9 +46,6 @@
                 <a class="nav-link" href="{% url 'Voting:vote_SU' %}">Vote</a>
               </li>
             {% endif %}
-            <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
-              <a class="nav-link" href="{% url 'Groups:my_invites' %}">Group Invites</a>
-            </li>
             {% if user.accepteduser.is_SU %}
               <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
                 <a class="nav-link" href="{% url 'Users:new_users' %}">New Applications</a>

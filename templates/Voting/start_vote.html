@@ -1,0 +1,27 @@
+{% extends 'Navbar.html' %}
+
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if isMember %}
+        <div class="container" id="thisone">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.user }}
+                {{ form.vote_type }}
+                <button type="submit" class="btn btn-primary">Submit Vote</button>
+            </form>
+        </div>
+    {% else %}
+        <h4>You dont belong here</h4>
+    {% endif %}
+
+{% endblock %}

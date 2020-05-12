@@ -1,0 +1,33 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+
+    {% for message in messages %}
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+
+    {% if isMember %}
+        {% if vote %}
+            <div class="card">
+                <p>{{ vote }}</p>
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.response }}
+                    <button type="submit" class="btn btn-primary">Submit Vote</button>
+                </form>
+            </div>
+        {% else %}
+            <h3>There are no vote going on start one.</h3>
+            <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:start_vote' group.pk %}" role="button">Start A Vote</a>
+        {% endif %}
+    {% else %}
+            <h4>You dont belong here</h4>
+    {% endif %}
+
+{% endblock %}
