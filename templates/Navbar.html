@@ -59,6 +59,13 @@
                 <a class="nav-link" href="{% url 'actions:SUactions' %}">Actions</a>
               </li>
             {% endif %}
+
+            {% if not user.accepteduser.is_SU %}
+              <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+                <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
+              </li>
+            {% endif %}
+
             <li class="nav-item">
               <a class="nav-link" href="{% url 'Logout' %}">Logout</a>
             </li>
