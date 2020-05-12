@@ -1,15 +1,33 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-<form method="POST">
-    {% csrf_token %}
-    Users: {{ form.user }}
+<div class="container" style="padding-top: 75px;">
+    <form method="POST">
+        {% csrf_token %}
 
-    <div class="row">
-        <hr />
-        <div class="col-lg-4">
-            <button type="submit" class="btn btn-info">Submit</button>
+        <div class="text-center">
+            <h1><b class="">Add User to White Box</b></h1>
         </div>
-    </div>
-</form>
+        
+        <div class="col d-flex justify-content-center" style="padding-top: 50px;">
+            <div class="col-sm-5 text-center">
+                <div class="card ">
+                    <div class="card-body">
+                        <div class="row" style="padding-left: 100px;">
+                            <b>Users:</b> {{ form.user }}
+                        </div>
+            
+                        <div class="row">
+                            <hr />
+                            <div class="col-lg-4">
+                                <button type="submit" class="btn btn-info">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
 {% endblock %}

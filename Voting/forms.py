@@ -148,9 +148,7 @@ class VoteForm(forms.ModelForm):
                     if (count == 3):
                         self.userPointUpdate(user, -5)    
                         groupObject.members.remove(user)
-                    else:
-                        voteObject.delete()
-                voteObject.delete()
+                    voteObject.delete()
 
             else:
 

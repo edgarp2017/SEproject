@@ -1,33 +1,88 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
+    <style>
+        .title{
+            text-align: center;
+            font-size:60px;
+            font-weight : bold;
+        }
+        .main{
+            width:750px;
+            margin:0 auto;
+            margin-top:350px;
+            height: 200px;
+        }
+        .card-title {
+            text-align: center;
+            font-size:30px;
+            font-weight : bold;
+        }
+        .option {
+            margin-top: 15px;
+            margin-left: 300px;
+            align-items: center;
+        }
+        .button {
+            margin-top: 20px;
+            margin-left: 300px;
+            align-items: center;
+        }
+    </style>
 
     {% for message in messages %}
-  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    {{ message }}
-  </div>
-{% endfor %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
 
     {% if isMember %}
         {% if vote %}
-            <div class="card">
-                <p>{{ vote }}</p>
-
-                <form action="" method="post">
-                    {% csrf_token %}
-                    {{ form.response }}
-                    <button type="submit" class="btn btn-primary">Submit Vote</button>
-                </form>
-            </div>
+            
+                <div class="card main">
+                    <p class='card-title'>Vote: {{ vote }}</p>
+    
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row text-center option">
+                            <div class="">
+                                Options: {{ form.response }}
+                            </div>
+                        </div>
+                        <div class="row button">
+                            <button type="submit" class="btn btn-primary">Submit Vote</button>
+                        </div>
+                    </form>
+                </div>
+         
         {% else %}
-            <h3>There are no vote going on start one.</h3>
-            <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:start_vote' group.pk %}" role="button">Start A Vote</a>
+        
+            <div>
+                <div class ="main">
+                    <div class="title">
+                        No Votes going on.
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:start_vote' group.pk %}" role="button">Start A Vote</a>
+                    </div>
+                </div>
+            </div>
+
         {% endif %}
     {% else %}
-            <h4>You dont belong here</h4>
+        <div>
+            <div class ="main">
+                <div class="title">
+                    You Do Not Belong here
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:group_detail' group.pk %}" role="button">Go back to {{ group.name }}</a>
+                </div>
+            </div>
+        </div>
     {% endif %}
 
 {% endblock %}

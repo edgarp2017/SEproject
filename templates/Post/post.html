@@ -1,13 +1,40 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
-        <div class="col text-center">
-            <div class="">title: {{form.title }}</div>
-            <div class="">description: {{ form.desc }}</div>
-        <button type="submit" class="btn btn-primary my-1">Submit!</button>
-        </div>
-    </form>
+
+    <div class="container">
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            <div class="col text-center">
+                <h2>
+                    <b>Creating Post for {{ group.name }}</b>
+                </h2>
+            </div>
+            <div class="col text-center">
+                <div class="card">
+                    <div class="card-title">
+                        <div class="col text-center">
+                            <h4>
+                                <b>Post Title</b>
+                            </h4>
+                        </div>
+                        {{form.title }}
+                    </div>
+
+                    <div class="card-body">
+                        <div class="col text-center">
+                            <h4>
+                                <b>Post Content</b>
+                            </h4>
+                        </div>
+                        <div class="">{{ form.desc }}</div>
+                    </div>
+                </div>
+            <button type="submit" class="btn btn-primary my-1">Submit!</button>
+            </div>
+        </form>
+
+    </div>
 {% endblock %}

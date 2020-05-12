@@ -18,20 +18,28 @@
     .buttons {
       padding-left: 50px;
     }
-    .pad {
-      margin-left: 15rem;
-
-    }
   </style>
 
-  <div class="row">
-    <div class="pad">
-      <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:makegroup' %}" role="button">Create Group</a>
-    </div>
-    <div class="pad">
-      <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:my_invites' %}" role="button">Check Invites</a>
+  <div class="container">
+    <div class="row">
+        <div class="col-sm">
+          <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:makegroup' %}" role="button">
+            Create Group
+          </a>
+        </div>
+        <div class="col-sm">
+          <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:my_invites' %}" role="button">
+            Check Invites
+          </a>
+        </div>
+        <div class="col-sm">
+          <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_white' %}" role="button">
+            BlackBox and WhiteBox
+          </a>           
+        </div>
     </div>
   </div>
+
 
   <div class="row">
       {% for group in groups %}
