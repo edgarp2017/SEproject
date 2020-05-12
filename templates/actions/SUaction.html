@@ -28,7 +28,11 @@
         <div class="panel-heading">
           <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#" href=#{{ forloop.counter }}>
-          {{complaint.id}} - {{complaint.guiltyUser}}
+          {% if complaint.guiltyUser %}
+          {{complaint.id}} - User: {{complaint.guiltyUser}}
+          {% else %}
+          {{complaint.id}} - Group: {{complaint.guiltyGroup}}
+          {% endif %}
         </a>
       </h4>
         </div>

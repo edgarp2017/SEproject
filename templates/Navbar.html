@@ -58,19 +58,20 @@
               <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
                 <a class="nav-link" href="{% url 'actions:SUactions' %}">Actions</a>
               </li>
-            {% else %}
-            <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
-              <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
-            </li>
             {% endif %}
             <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Users:black_white' %}">BlackWhiteBox</a>
             </li>
+            {% if not user.accepteduser.is_SU %}
+            <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+              <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
+            </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'Logout' %}">Logout</a>
             </li>
           {% endif %}
-
+          
           {% if not user.is_authenticated %}
             <li class="{% if request.resolver_match.url_name == "Signup" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Apply' %}">Apply</a>
@@ -78,7 +79,11 @@
             <li class="{% if request.resolver_match.url_name == "Login" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Login' %}">Login</a>
             </li>
+            <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+              <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
+            </li>
           {% endif %}
+          
         </ul>
       </div>
     </div>
