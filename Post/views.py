@@ -9,6 +9,7 @@ from Groups.models import Group
 
 @login_required(login_url="/login")
 def PostView(request, pk):
+    group = Group.objects.get(pk=pk)
     form = PostForm(request.POST)
     if form.is_valid():
         post = form.save(commit=False)
@@ -18,7 +19,7 @@ def PostView(request, pk):
         post.save()
         messages.success(request, 'Post was successful!')
         return redirect('/groups/%s' %pk)
-    return render(request, 'Post/post.html', {'form': form})
+    return render(request, 'Post/post.html', {'form': form, 'group':group})
 
 
 @login_required(login_url="/login")

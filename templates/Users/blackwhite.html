@@ -8,34 +8,62 @@
             </div>
         {% endfor %}
     {% endif %}
-    <a class="btn btn-outline-primary mb-3" href="{% url 'Users:white_box' %}" role="button">
-        Add To White Box
-    </a>
-    <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_box' %}" role="button">
-        Add To Black Box
-    </a>
-    <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_box_message' %}" role="button">
-        Set Message for Black Box
-    </a>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <a class="btn btn-outline-primary mb-3" href="{% url 'Users:white_box' %}" role="button">
+                    Add To White Box
+                </a>
+            </div>
+            <div class="col-sm">
+                <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_box' %}" role="button">
+                    Add To Black Box
+                </a>
+            </div>
+            <div class="col-sm">
+                <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_box_message' %}" role="button">
+                    Set Message for Black Box
+                </a>            
+            </div>
+        </div>
+    </div>
 
-    <h4>White Box</h4>
-    {% if whiteboxUsers %}
-        {% for user in whiteboxUsers %}
-            {{ user }}
-        {% endfor %}
-    {% else %}
-        <p>No Users in White Box, Go Add some!</p>
-    {% endif %}
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-sm">
+                <h4><b>White Box</b></h4>
+                {% if whiteboxUsers %}
+                    <div class="list-group list-group-flush">
+                        {% for user in whiteboxUsers %}
+                            <div class="list-group-item">{{ user }}</div>
+                        {% endfor %}
+                    </div>
 
-    </br>
+                {% else %}
 
-    <h4>Black Box</h4>
-    {% if blackBoxUsers %}
-        {% for user in blackBoxUsers %}
-            {{ user }}
-        {% endfor %}
-    {% else %}
-        <p>No Users in Black Box, Go Add some!</p>
-    {% endif %}
+                <p>No Users in White Box, Go Add some!</p>
+            
+                {% endif %}
+            </div>
+
+            <div class="col-sm">
+                <h4><b>Black Box</b></h4>
+
+                {% if blackBoxUsers %}
+                
+                    <div class="list-group list-group-flush">
+                        {% for user in blackBoxUsers %}
+                            <div class="list-group-item">{{ user }}</div>
+                        {% endfor %}
+                    </div>
+
+                {% else %}
+                    <p><b>No Users in Black Box, Go Add some!</b></p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

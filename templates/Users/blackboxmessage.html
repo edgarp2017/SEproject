@@ -1,16 +1,36 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-<form method="POST">
-    {% csrf_token %}
-    Message: {{ form.message }}
 
-    <div class="row">
-        <hr />
-        <div class="col-lg-4">
-            <button type="submit" class="btn btn-info">Submit</button>
+<div class="container" style="padding-top: 100px;">
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="text-center">
+            <h1><b class="">Customize Black Box Message</b></h1>
         </div>
-    </div>
-</form>
+        
+        <div class="col d-flex justify-content-center" style="padding-top: 50px;">
+            <div class="col-sm-5 text-center">
+                <div class="card ">
+                    <div class="card-title">
+                        <b>New Message:</b>
+                    </div>
+                    <div class="card-body">
+                         {{ form.message }}
+            
+                        <div class="row">
+                            <hr />
+                            <div class="col-lg-4">
+                                <button type="submit" class="btn btn-info">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
 
 {% endblock %}

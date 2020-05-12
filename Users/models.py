@@ -41,14 +41,15 @@ class AcceptedUser(models.Model):
         self.rep_score += amount
 
         if self.is_OU:
-            print(self.rep_score)
             if self.rep_score > 30:
                 self.is_OU = False
                 self.is_VIP = True
             
             if self.rep_score < 0:
                 BlackList.objects.create(email=self.user.email)
-                self.user.delete()
+                user = User.objects.get(pk=self.user.pk)
+                user.delete()
+
                 
         if self.is_VIP:
             if self.rep_score < 20:

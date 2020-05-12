@@ -23,9 +23,6 @@
         {% for member in members %}
             <div class="list-group-item">{{ member }}</div>
         {% endfor %}
-
-        <br>
-
       </div>
     </div>
     <div class="col-lg-9 project-descr">
@@ -44,9 +41,7 @@
         <div class="col-lg-9 project-descr">
           <div class="card h-100">
             {% if member %}
-            <button type="button" class="btn btn-outline-primary mb-3" >
-              <a href="{% url 'Post:delete' post.id %}">Delete Post</a>
-            </button>
+              <a class="btn btn-outline-primary mb-3" href="{% url 'Post:delete' post.id %}">Delete Post</a>
             {% endif %}
             <div class="card-body" >
               <h4 class="card-title">{{ post.title }}</h4>

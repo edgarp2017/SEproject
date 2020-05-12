@@ -1,29 +1,37 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-<div class="col-sm-10 offset-sm-1 text-center">
-  <h3 class="display-10">TeamUp Sign up</h3>
-  <a href="{% url 'Login' %}">Already have an account? Login Here !</a>
-</div>
-
-<form method="post" class="col-lg-6 offset-lg-3">
-  {% csrf_token %}
-  {% for field in form %}
-      <div class="row justify-content-center">
-        <div class="form-group">
-          {{ field.label_tag }}
-          {{ field }}
-          {% if field.help_text %}
-            <small class="form-text text-muted">{{ field.help_text }}</small>
-          {% endif %}
-        </div>
-      </div>
-  {% endfor %}
-  {% for error in field.errors %}
-    <p style="color: red;">{{ error }}</p>
-  {% endfor %}
-  <div class="col text-center">
-    <button type="submit" class="btn btn-primary my-1">Sign up</button>
+  <div class="col-sm-10 offset-sm-1 text-center">
+    <a class="btn btn-outline-primary mb-3" href="{% url 'Login' %}" role="button">Already have an account? Login Here!</a>
   </div>
-</form>
+
+  <div class="col text-center">
+    <h3 class="display-10">TeamUp Sign up</h3>
+  </div>
+
+  <form method="post" class="col-lg-6 offset-lg-3">
+    {% csrf_token %}
+    
+    {% for field in form %}
+        <div class="row justify-content-center">
+          <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+              <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+          </div>
+        </div>
+    {% endfor %}
+
+    {% for error in field.errors %}
+      <p style="color: red;">{{ error }}</p>
+    {% endfor %}
+
+    <div class="col text-center">
+      <button type="submit" class="btn btn-primary my-1">Sign up</button>
+    </div>
+
+  </form>
+
 {% endblock %}
