@@ -1,7 +1,8 @@
 from django.urls import path, include
 from django.contrib.auth import views
 
-from .views import NewUserFormView, BlackWhiteBoxesView, WhiteBoxView, BlackBoxView, BlackBoxMessage
+from .views import (NewUserFormView, BlackWhiteBoxesView, WhiteBoxView, 
+BlackBoxView, BlackBoxMessage, AppealView, AppealApplicationsView)
 
 app_name = 'Users'
 
@@ -10,5 +11,6 @@ urlpatterns = [
     path('blackwhite', BlackWhiteBoxesView, name='black_white'),
     path('addbbox', BlackBoxView, name='black_box'),
     path('addwbox', WhiteBoxView, name='white_box'),
-    path('message', BlackBoxMessage, name='black_box_message')
+    path('message', BlackBoxMessage, name='black_box_message'),
+    path('appeals', AppealApplicationsView, name='response_appeal'),
 ]

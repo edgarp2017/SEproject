@@ -93,6 +93,15 @@ class BlackBox(models.Model):
 
     def __str__(self):
         return "%s BlackBox" %self.user
+
+class Appeal(models.Model):
+    email =  models.EmailField(max_length=254, null=False)
+    firstName = models.CharField(max_length=50, null=False)
+    lastName = models.CharField(max_length=50, null=False)
+    reference = models.CharField(max_length=50, null=False)
+
+    def __str__(self):
+        return self.firstName+ ' ' + self.lastName
         
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):

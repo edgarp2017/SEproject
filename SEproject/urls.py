@@ -8,7 +8,7 @@ from .views import (
     Profile,
     ApplicationView
 )
-
+from Users.views import AppealView
 from Poll import views as poll_views
 
 urlpatterns = [
@@ -23,4 +23,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='Logout'),
     path('profile/', Profile, name='Profile'),
     path('user/', include('Users.urls', namespace='Users')),
+    path('appeal', AppealView, name='appeal'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
