@@ -50,7 +50,7 @@
               <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
                 <a class="nav-link" href="{% url 'Users:new_users' %}">Applications</a>
               </li>
-              <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+              <li class="{% if request.resolver_match.url_name == "response_appeal" %}active{% endif %}">
                 <a class="nav-link" href="{% url 'Users:response_appeal' %}">Appeals</a>
               </li>
             {% endif %}
@@ -75,9 +75,12 @@
             <li class="{% if request.resolver_match.url_name == "Login" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Login' %}">Login</a>
             </li>
-            <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+            <li class="{% if request.resolver_match.url_name == "actions" %}active{% endif %}">
               <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
             </li>
+            <li class="{% if request.resolver_match.url_name == "appeal" %}active{% endif %}">
+                <a class="nav-link" href="{% url 'appeal' %}">Appeals</a>
+              </li>
           {% endif %}
 
         </ul>

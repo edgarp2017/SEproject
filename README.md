@@ -29,9 +29,10 @@ The following **required** functionality is completed:
 - [x] After 3 Warnings the user wil be automatically removed from the group(
 - [x] Remove 5 rep-points from user being automatically kicked out
 - [x] Vote to kick out member **Vote must be unanimous**
-- [ ] OUs can complain or praise other OUs (**Being Worked On by SevePoint3**)
-- [ ] Group members can close the group and conduct an exit evaluation to other members(**TBD**)
-- [x] System keeps a list of taboo words that the system converts into ***
+- [x] OUs can complain or praise other OUs
+- [x] Group members can close the group and conduct an exit evaluation to other members(**TBD**)
+- [x] System keeps a list of taboo words that the system converts into
+- [x] VIP's can vote other vip as a democratic superuser
 
 ## Video Walkthrough
 
