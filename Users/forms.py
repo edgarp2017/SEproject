@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-from .models import Application, AcceptedUser, RejectedUser, BlackList, BlackBox, WhiteBox
+from .models import Application, AcceptedUser, RejectedUser, BlackList, BlackBox, WhiteBox, Appeal
 from .choices import RESPONSE_CHOICES
 
 class ApplicationForm(forms.ModelForm):
@@ -181,3 +181,84 @@ class AddUserBoxForm(forms.Form):
         for instance in whiteBoxUsers:
             if instance.username == data['user'].username:
                 return True
+
+class AppealForm(forms.ModelForm):
+    reference = forms.ModelChoiceField(queryset=AcceptedUser.objects.all().filter(is_SU=False))
+    class Meta:
+        model = Appeal
+        fields = [
+            'email',
+            'firstName',
+            'lastName',
+            'reference'
+        ]
+
+    def checkAppealNeeded(self):
+        data = self.cleaned_data
+        try:
+            RejectedUser.objects.get(email=data['email'])
+        except ObjectDoesNotExist:
+            return False
+        return True
+
+    def checkBlackListed(self):
+        data = self.cleaned_data
+        try:
+            BlackList.objects.get(email=data['email'])
+        except ObjectDoesNotExist:
+            return False
+        return True
+
+
+class AppealResposneForm(forms.Form):
+    appeal = forms.ModelChoiceField(queryset=Appeal.objects.all())
+    response = forms.ChoiceField(choices=RESPONSE_CHOICES)
+    username = forms.CharField(label='username')
+    password = forms.CharField(label='password', widget=forms.PasswordInput)
+
+    class Meta:
+       fields = [
+           'appeal',
+           'response',
+           'username',
+           'password'
+       ]
+    
+    def getChoice(self):
+        data = self.cleaned_data
+        appeal = data['appeal']
+        username = data['username']
+
+        if data['response'] == "1":
+            if User.objects.filter(username=username).exists():
+                return False
+            else:
+                self.acceptApplication(data['username'], data['password'], appeal)
+        else:
+            self.rejectApplication(appeal.email)
+
+        appeal.delete()
+        return True
+
+    def acceptApplication(self, username, password, appeal):
+        '''Will email username and password also create user and accepteduser'''
+        user = User.objects.create_user(username, password=password, email=appeal.email, 
+        first_name=appeal.firstName, last_name=appeal.lastName)
+        user.save()
+        AcceptedUser.objects.create(user=user, reference=appeal.reference)
+        status = 'new user was created'
+
+        #send out email if accepted
+        html_message = render_to_string('AcceptEmail.html', {'username': username, 'password':password})
+        plain_message = strip_tags(html_message)
+        
+        send_mail('Welcome to TeamUp', plain_message, 'sender@example.com', [application.email], html_message=html_message) #action of sending email
+
+        
+    def rejectApplication(self, email):
+        BlackList.objects.create(email=email)
+        html_message = render_to_string('BlackListEmail.html', {})
+        plain_message = strip_tags(html_message)
+        send_mail('TeamUp: BLACKLISTED', plain_message, 'sender@example.com', [email], html_message=html_message) #action of sending email
+       
+    
