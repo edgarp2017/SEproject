@@ -6,7 +6,9 @@ from django.views import generic
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import GroupForm, InviteUserForm, RejectedInviteMessage
-from .models import Group, InviteUser
+from Users.forms import AddUserBoxForm
+from .models import Group, InviteUser, EvaluationRep
+from Voting.models import ClosedGroups
 from Users.models import AcceptedUser
 from Post.models import Post
 
@@ -74,13 +76,45 @@ def UserInvites(request):
     invites = InviteUser.objects.filter(sent_to=request.user)
     return render(request, 'teamup/userinvites.html', {'invites':invites})
 
+@login_required(login_url="/login")
+
+def evaluation(request,pk):
+    group = Group.objects.get(pk=pk)
+    members = group.members.all()
+
+    context = {'members' : members}
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        #form = ActionForm(request.POST, request.FILES, request=request)
+        # check whether it's valid:
+        for member in members:
+            rep  = request.POST['rep'+member.username]
+            evaluatingUser = request.user.username
+            whiteBox = request.POST['whiteBox']
+            blackBox = request.POST['blackBox']
+            reason = request.POST['reason']
+            evaluation, created = EvaluationRep.objects.update_or_create(evaluatingUser = evaluatingUser, repGiven = rep, group = group, member = member, whiteBox = whiteBox, blackBox = blackBox, reason = reason)
+            evaluation.create()
+
+        numMems = members.count()
+        if (numMems**(numMems-1)==EvaluationRep.objects.filter(group = group)): # checks is everyone has done the evaluation
+            print("Do stuff") #From here on the assigned VIP will check the user evaluations and assign Rep and we also might either add to white box here or in the loop.
+
+
+    return render(request, 'teamup/evaluation.html',context)    
+
 class GroupDetail(generic.DetailView):
     model = Group
+    # If the group is a shutdown down group change the template to this
+    
     template_name = 'teamup/groupdetail.html'
-
+    
+   
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group = Group.objects.get(name=self.object)
+        if ClosedGroups.objects.filter(group = group).exists():
+            context['shutdown'] = True
         context['members'] = group.members.all()
         context['member'] = self.checkIfMember()
         context['posts'] = Post.objects.filter(group=self.object)

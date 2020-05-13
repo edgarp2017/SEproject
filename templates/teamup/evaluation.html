@@ -1,0 +1,25 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+<h2>Evaluations</h2>
+<form method="POST">
+    {% csrf_token %}
+
+   {% for member in members %} 
+   <h5>{{member.username}}:</h5>
+   <label for="rep{{member.username}}">Reps: </label>
+   <input type="number" name="rep{{member.username}}" min="1" max="25"><br>
+
+   <input type="checkbox" name="whiteBox" value="True">
+   <label for="whiteBox"> Add To whiteBox</label><br>
+
+   <input type="checkbox" name="blackBox" value="True">
+   <label for="blackBox"> Add To blackBox</label><br>
+
+   <label for="reason">Reason for Box Choice:</label>
+  <input type="text" name="reason"><br><br>
+   {% endfor %}
+
+<button type="submit" class="btnSubmit" name="submit">submit</button>
+</form>
+{% endblock %}

@@ -78,3 +78,6 @@ class InviteUserForm(forms.ModelForm):
         except ObjectDoesNotExist:
             return False
         return True
+
+#class evaluationForm(forms.Form):
+    

@@ -9,8 +9,10 @@
   {% endfor %}
 {% endif %}
 <div class="container">
+  {% if not shutdown %}
   <div class="row">
     <div class="col-lg-3">
+      
       <h2 class="my-4">{{ object.name }} Members</h2>
       {% if member %}
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:invite' object.pk %}" role="button">Invite</a>
@@ -56,6 +58,11 @@
     </div>
 
   </div>
+  {% else %}
+  {{ object.name }}
+  <h2>Group has been voted to shutdown please fillout evaluation form on the link below</h2>
+  <a href = "{% url 'Groups:evaluation' object.pk %}">evaluation</a>
+  {% endif %}
   </div>
 </div>
 

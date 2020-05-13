@@ -25,3 +25,13 @@ class RejectedInviteMessage(models.Model):
 
     def __str__(self):
         return "%s rejected invite for %s group" %(self.invite_rejected_by, self.group)
+
+class EvaluationRep(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    member = models.ForeignKey(User, on_delete=models.CASCADE)
+    evaluatingUser = models.CharField(max_length=100,default=None)
+    repGiven = models.IntegerField()
+    whiteBox = models.BooleanField(default=False)
+    blackBox = models.BooleanField(default=False)
+    reason = models.CharField(max_length=200, default=None)
+    

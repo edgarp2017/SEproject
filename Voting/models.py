@@ -21,10 +21,12 @@ class VoteType(models.Model):
     PRIASE = 'priase'
     WARN = 'warn'
     KICK = 'kick'
+    SHUTDOWN = 'shutdown'
     TYPE = [
         (PRIASE, 'priase'),
         (WARN, 'warn'),
-        (KICK, 'kick')
+        (KICK, 'kick'),
+        (SHUTDOWN, 'shutdown')
     ]
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -55,3 +57,8 @@ class WarnList(models.Model):
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Vote.objects.create(vote=instance)
+
+class ClosedGroups(models.Model):
+        group =  models.ForeignKey(Group, on_delete=models.CASCADE)
+    
+

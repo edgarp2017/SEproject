@@ -3,7 +3,7 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import VoteSU, VoteType, Vote, WarnList
+from .models import VoteSU, VoteType, Vote, WarnList, ClosedGroups
 from Groups.models import Group
 from Users.models import AcceptedUser
 from Post.models import Post
@@ -66,7 +66,7 @@ class VoteTypeForm(forms.ModelForm):
         members = self.group.members.all()
         self.fields['user'].queryset = User.objects.filter(username__in=list(members))#.exclude(username=self.user)
 
-    user = forms.ModelChoiceField(queryset=None)
+    user = forms.ModelChoiceField(queryset=None, required=False)
     
     class Meta:
         model = VoteType
@@ -149,6 +149,21 @@ class VoteForm(forms.ModelForm):
                         self.userPointUpdate(user, -5)    
                         groupObject.members.remove(user)
                     voteObject.delete()
+
+            elif (voteObject.vote_type == 'shutdown'):
+                closedGroup, created = ClosedGroups.objects.update_or_create(group =self.group)
+                if created:
+                    print("group is marked for shutdown")
+                closedGroup.save()
+
+                if voteResponse.no_count == 0:
+                    WarnList.objects.create(user=user, group=self.group)
+                    count = WarnList.objects.filter(user=user, group=self.group).count()
+                    if (count == 3):
+                        self.userPointUpdate(user, -5)    
+                        groupObject.members.remove(user)
+                    voteObject.delete()
+
 
             else:
 

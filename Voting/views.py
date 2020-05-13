@@ -41,18 +41,30 @@ def StartVoteView(request, pk):
             isMember = True
 
     if form.is_valid():
-        if form.checkOwner():
-            messages.info(request, 'You Can only praise a group owner!')
-            return redirect('/groups/%s/votes' %group.pk)
-        elif form.checkExist():
-            messages.error(request, 'Vote Exist, Try again later!')
-            return redirect('/groups/%s/votes' %group.pk)
-        else:
+        
+        if request.POST.get('vote_type') == 'shutdown': #Check to see if they voted for shutdown and bypass all the owner checks
             startVote = form.save(commit=False)
             startVote.group = group
+            startVote.user = request.user
             startVote.save()
             messages.success(request, 'Vote Started!')
             return redirect('/groups/%s/votes' %group.pk)
+        else:
+            if (request.POST.get('username')):
+                if form.checkOwner():
+                    messages.info(request, 'You Can only praise a group owner!')
+                    return redirect('/groups/%s/votes' %group.pk)
+                elif form.checkExist():
+                    messages.error(request, 'Vote Exist, Try again later!')
+                    return redirect('/groups/%s/votes' %group.pk)
+                else:
+                    startVote = form.save(commit=False)
+                    startVote.group = group
+                    startVote.save()
+                    messages.success(request, 'Vote Started!')
+                    return redirect('/groups/%s/votes' %group.pk)
+            else:
+                messages.error(request, 'Please Select a User to Vote For!')
 
     return render(request, 'Voting/start_vote.html', {'form':form, 'isMember': isMember, 'group':group})
 
