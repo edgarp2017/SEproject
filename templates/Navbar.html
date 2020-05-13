@@ -54,18 +54,12 @@
                 <a class="nav-link" href="{% url 'Users:response_appeal' %}">Appeals</a>
               </li>
             {% endif %}
-            <li class="nav-item">
+            <li class="{% if request.resolver_match.url_name == "Profile" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Profile' %}">Profile</a>
             </li>
             {% if user.accepteduser.is_SU %}
-              <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
+              <li class="{% if request.resolver_match.url_name == "SUactions" %}active{% endif %}">
                 <a class="nav-link" href="{% url 'actions:SUactions' %}">Actions</a>
-              </li>
-            {% endif %}
-
-            {% if not user.accepteduser.is_SU %}
-              <li class="{% if request.resolver_match.url_name == "new_users" %}active{% endif %}">
-                <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
               </li>
             {% endif %}
 
@@ -73,7 +67,7 @@
               <a class="nav-link" href="{% url 'Logout' %}">Logout</a>
             </li>
           {% endif %}
-          
+
           {% if not user.is_authenticated %}
             <li class="{% if request.resolver_match.url_name == "Signup" %}active{% endif %}">
               <a class="nav-link" href="{% url 'Apply' %}">Apply</a>
@@ -85,7 +79,7 @@
               <a class="nav-link" href="{% url 'actions:actions' %}">Actions</a>
             </li>
           {% endif %}
-          
+
         </ul>
       </div>
     </div>

@@ -1,24 +1,24 @@
 {% extends 'Navbar.html' %}
 
 {% block content %}
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-primary" role="alert">
-      {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
+{% for message in messages %}
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
 <div class="container">
   {% if not shutdown %}
   <div class="row">
     <div class="col-lg-3">
-      
+
       <h2 class="my-4">{{ object.name }} Members</h2>
       {% if member %}
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:invite' object.pk %}" role="button">Invite</a>
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:votes' object.pk %}" role="button">View Vote</a>
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:view_polls' group.pk %}" role="button">View polls</a>
-      <button type="button" class="btn btn-outline-primary mb-3" >Leave {{ object.name }}</button>
       {% endif %}
       <div class="list-group d-inline">
         {% for member in members %}

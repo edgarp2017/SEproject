@@ -63,13 +63,16 @@ def vote(request,pk):
     poll = Poll.objects.get(Group=pk)
     user = request.user
     voted = False
-    form = CreatePollForm(request.POST)
+    form = CreatePollForm(request.POST, request=request.user, group=group)
+    members = group.members.all().count()
 
     voters = poll.Voter.all()
+    votersCount = poll.Voter.all().count()
+    print(votersCount)
+    print(members)
 
     for vote in voters:
         if vote.username == user.username:
-            print(vote.username)
             voted = True
 
 
@@ -91,6 +94,13 @@ def vote(request,pk):
             HttpResponse(400, 'Invalid Form')
 
         poll.save()
+
+        votersCount +=1
+
+        if members == votersCount:
+            form.delete()
+            messages.success(request, 'The Results of the poll have been posted!')
+            return redirect('/groups/%s' %group.pk)
 
         return redirect('/groups/%s/viewpolls' %group.pk)
 
