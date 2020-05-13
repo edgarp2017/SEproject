@@ -1,0 +1,26 @@
+{% extends 'Navbar.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 100px;">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card w-100">
+                <div class="card-body">
+                <h5 class="card-title bold text-center font-weight-bold">Invite for Group: {{ invite.group }}</h5>
+                <p class="card-text"><b>Group's purpose:</b> {{ invite.group.purpose }} 
+                    </br>Sent By: {{ invite.sent_by }}
+                </p>
+                <div class="col text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.response }}
+                        {{ form.message }}
+                        <button type="submit" class="btn btn-primary my-1">Submit</button>
+                    </form> 
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

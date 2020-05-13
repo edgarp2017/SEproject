@@ -2,6 +2,14 @@
 
 {% block content %}
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     {% if invites %}
         {% for invite in invites %}
             <div class="card w-50">
@@ -12,7 +20,7 @@
                 </p>
                 <div class="col text-center">
                     <a href="{% url 'Groups:group_detail' invite.group.pk  %}" class="btn btn-primary">View Group</a>
-                    <a href="{% url 'Groups:group_detail' invite.group.pk  %}" class="btn btn-primary">Accept or Reject</a>
+                    <a href="{% url 'Groups:invite_response' invite.pk  %}" class="btn btn-primary">Accept or Reject</a>
                 </div>
                 </div>
             </div>

@@ -19,7 +19,6 @@
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:votes' object.pk %}" role="button">View Vote</a>
       <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:view_polls' group.pk %}" role="button">View polls</a>
       <button type="button" class="btn btn-outline-primary mb-3" >Leave {{ object.name }}</button>
-      <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:reject_messages' object.pk %}" role="button">Rejections</a>
       {% endif %}
       <div class="list-group d-inline">
         {% for member in members %}

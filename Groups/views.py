@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.views import generic
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import GroupForm, InviteUserForm, RejectedInviteMessage
+from .forms import GroupForm, InviteUserForm, RejectedInviteMessage,InviteResponseForm
 from Users.forms import AddUserBoxForm
 from .models import Group, InviteUser, EvaluationRep
 from Voting.models import ClosedGroups
@@ -136,3 +136,19 @@ def RejectMessagesView(request, pk):
     group = Group.objects.get(pk=pk)
     messages = RejectedInviteMessage.objects.filter(group=group)
     return render(request, 'teamup/rejectmessages.html', {'messages':messages})
+
+def ResponseGroupInvitesView(request, pk):
+    invite = InviteUser.objects.get(pk=pk)
+    group = invite.group
+    form = InviteResponseForm(request.POST, request=request.user, group=group, invite=invite)
+
+    if form.is_valid():
+        invite.delete()
+        if form.saveAction():
+            messages.success(request, 'Invite Accepted, Enjoy!')
+            return redirect('/groups/%s' %group.pk)
+        else:
+            messages.success(request, 'Invite Rejected!')
+            return redirect('/my_invites/')
+
+    return render(request, 'teamup/inviteresponse.html', {'invite':invite, 'form':form})
