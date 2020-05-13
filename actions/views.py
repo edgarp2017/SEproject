@@ -13,34 +13,33 @@ def actions(request):
         form = ActionForm(request.POST, request.FILES, request=request)
         # check whether it's valid:
         if form.is_valid():
-                if request.user.is_anonymous:
-                    messages.error(request, 'Must be logged in to send a compliment')
-                    return redirect('/login')
-                else:    
-                    if 'praise' in request.POST:
-                        if (request.POST.get('username')):
-                            form.compliment()
-                            messages.success(request, 'Compliment Has Been Sent')
-                        else:
-                            messages.error(request, 'Please Select a User to Compliment')
+                if 'praise' in request.POST:
+                    if request.user.is_anonymous:
+                        messages.error(request, 'Must be logged in to send a compliment')
+                        return redirect('/login')
+                    if (request.POST.get('username')):
+                        form.compliment()
+                        messages.success(request, 'Compliment Has Been Sent')
+                    else:
+                        messages.error(request, 'Please Select a User to Compliment')
 
 
-                    if 'complaint' in request.POST:
-                        if (request.POST.get('username') and request.POST['group']):
-                            messages.error(request, 'Please Select Either User or Group Not Both!')
+                if 'complaint' in request.POST:
+                    if (request.POST.get('username') and request.POST['group']):
+                        messages.error(request, 'Please Select Either User or Group Not Both!')
+                    
+                    elif (request.POST.get('username')):
+                        form.complaint()
+                        messages.success(request, 'Complaint Has Been Filed')
+
+                    elif (request.POST.get('group')):
+                        form.complaint()
+                        messages.success(request, 'Complaint Has Been Filed')
                         
-                        elif (request.POST.get('username')):
-                            form.complaint()
-                            messages.success(request, 'Complaint Has Been Filed')
-
-                        elif (request.POST.get('group')):
-                            form.complaint()
-                            messages.success(request, 'Complaint Has Been Filed')
-                            
-                        else:
-                            messages.error(request, 'Please Select Either User or Group!')
-                # process the data in form.cleaned_data as required
-                # redirect to a new URL:
+                    else:
+                        messages.error(request, 'Please Select Either User or Group!')
+            # process the data in form.cleaned_data as required
+            # redirect to a new URL:
             
 
     # if a GET (or any other method) we'll create a blank form
