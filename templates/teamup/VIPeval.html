@@ -1,0 +1,130 @@
+{% extends 'Navbar.html' %}
+{% load static %}
+
+
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.accepteduser.is_VIP %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Material design Accordion - Bootstrap v3</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'><link rel="stylesheet" href="{% static 'actions/SUActions/style.css' %}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="container">
+  <div class="col-md-6 col-sm-6">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+
+        {% endfor %}
+    {% endif %}
+
+    <h3>Evaluations</h3>
+    <div class="panel-group wrap" id="bs-collapse">
+
+
+      {% for evaluation in evaluations %}
+      <div class="panel">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#" href=#{{ forloop.counter }}>
+           Group: {{evaluation.group.name}}
+        </a>
+      </h4>
+        </div>
+        <div id={{ forloop.counter }} class="panel-collapse collapse">
+          <div class="panel-body">
+            MedianRep: {{medianRep}}
+            <br> 
+            User feedback: Overall content with Group performance
+            <br> 
+            <br>
+            <form method="POST">
+              {% csrf_token %}
+            <p align="right">
+            <button type="submit" name="evaluated" value={{evaluation.group.name}}>Evaluated</button>
+          </p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+      <!-- end of panel -->
+
+
+  
+
+    </div>
+    <!-- end of #bs-collapse - start of right panel  -->
+
+  </div>
+  <!--
+  <div class="col-md-6 col-sm-6">
+    <h3>Actions</h3>
+
+    
+    
+      <div class="panel">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title" align ="center">
+        <a role="" data-toggle="" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Resolve Complaints
+        </a>
+      </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            <h4 align ="center">Select Group or User To Punish</h4>
+            <br>
+            <form method="POST">
+              {% csrf_token %}
+            <p align ="center">{{ form.username.label_tag }} {{ form.username }} or {{ form.group.label_tag }} {{ form.group }} </p>
+            <p align="center">{{ form.deduction.label_tag }} {{ form.deduction }} <button type="submit" name="deduct">Deduct</button> </p> 
+            <p align="center"><button type="submit" name="delete">Delete Entity</button> </p> 
+
+          </form>
+          </div>
+        </div>
+      </div>
+       end of panel -->
+
+
+    <!-- end of #accordion -->
+
+  </div>
+  <!-- end of wrap -->
+
+</div>
+<!-- end of container -->
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script><script  src="{% static 'actions/SUActions/script.js' %}"></script>
+
+</body>
+</html>
+{% else %}
+<h2>You are not a VIP!</h2>
+{% endif %}
+
+{% else %}
+<h2>You are not a VIP!</h2>
+{% endif %}
+
+{% endblock %}

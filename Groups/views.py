@@ -4,9 +4,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views import generic
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.db.models import Avg
 from .forms import GroupForm, InviteUserForm, RejectedInviteMessage,InviteResponseForm
 from Users.forms import AddUserBoxForm
+from actions.forms import SUActionForm
 from .models import Group, InviteUser, EvaluationRep
 from Voting.models import ClosedGroups
 from Users.models import AcceptedUser
@@ -77,31 +78,79 @@ def UserInvites(request):
     return render(request, 'teamup/userinvites.html', {'invites':invites})
 
 @login_required(login_url="/login")
-
 def evaluation(request,pk):
     group = Group.objects.get(pk=pk)
     members = group.members.all()
-
-    context = {'members' : members}
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         #form = ActionForm(request.POST, request.FILES, request=request)
         # check whether it's valid:
-        for member in members:
-            rep  = request.POST['rep'+member.username]
-            evaluatingUser = request.user.username
-            whiteBox = request.POST['whiteBox']
-            blackBox = request.POST['blackBox']
-            reason = request.POST['reason']
-            evaluation, created = EvaluationRep.objects.update_or_create(evaluatingUser = evaluatingUser, repGiven = rep, group = group, member = member, whiteBox = whiteBox, blackBox = blackBox, reason = reason)
-            evaluation.create()
-
         numMems = members.count()
-        if (numMems**(numMems-1)==EvaluationRep.objects.filter(group = group)): # checks is everyone has done the evaluation
-            print("Do stuff") #From here on the assigned VIP will check the user evaluations and assign Rep and we also might either add to white box here or in the loop.
+        print(numMems**(numMems-1))
+        evaluatingUser = request.user.username
+        
+        for member in members:
+            if EvaluationRep.objects.filter(member = member, evaluatingUser = evaluatingUser).exists():
+                messages.error(request, "You've Already filled out an evaluation form")
+                return  redirect('/')
+            
+            if not (member.username == request.user.username):
+                rep  = request.POST['rep'+member.username]
+                
+                if 'whiteBox' in request.POST:
+                    whiteBox = request.POST.get('whiteBox')
+                else:
+                    whiteBox = False
+                
+                if 'blackBox' in request.POST:
+                    blackBox = request.POST.get('blackBox')
+                else:
+                    blackBox = False
+                
+                reason = request.POST['reason']
+                evaluation, created = EvaluationRep.objects.update_or_create(evaluatingUser = evaluatingUser, repGiven = rep, group = group, member = member, whiteBox = whiteBox, blackBox = blackBox, reason = reason)
+                evaluation.save()
+        
 
-
+        if ((numMems**(numMems-1))<=(EvaluationRep.objects.filter(group = group).count())): # checks is everyone has done the evaluation
+            print("Evaluation Complete") #From here on the assigned VIP will check the user evaluations and assign Rep and we also might either add to white box here or in the loop.
+            evaluatedGroup = ClosedGroups.objects.get(group=group)
+            evaluatedGroup.isEvaluted = True
+            evaluatedGroup.save()
+    
+        return  redirect('/')
+                
+                
+    context = {'members' : members}
     return render(request, 'teamup/evaluation.html',context)    
+
+@login_required(login_url="/login")
+def VIPeval(request):
+    evaluations = ClosedGroups.objects.filter(isEvaluted = True).order_by('id')
+    rep = 0
+    for Egroup in evaluations:
+        medianRep = EvaluationRep.objects.filter(group = Egroup.group).aggregate(Avg('repGiven'))
+        rep = medianRep['repGiven__avg']
+   
+    if request.method == 'POST':
+        
+        # check whether it's valid:
+            if 'evaluated' in request.POST:
+                print(request.POST.get('evaluated'))
+                finGroup = Group.objects.get(name = request.POST.get('evaluated'))
+                for user in finGroup.members.all():
+                    member = AcceptedUser.objects.get(user=user)
+                    member.rep_score+=medianRep['repGiven__avg']
+                    member.save()
+                finGroup.delete()
+                messages.success(request, 'Members have been given the median Rep Score and Now the group is offically deleted')
+                
+    evaluations = ClosedGroups.objects.filter(isEvaluted = True).order_by('id')
+    context = {'evaluations' : evaluations, 'medianRep' : rep}
+
+    return render(request, 'teamup/VIPeval.html', context)
+    
+
 
 class GroupDetail(generic.DetailView):
     model = Group

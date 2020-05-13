@@ -35,8 +35,15 @@
         <div class="col-sm">
           <a class="btn btn-outline-primary mb-3" href="{% url 'Users:black_white' %}" role="button">
             BlackBox and WhiteBox
+          </a>          
+        </div>
+        {% if user.accepteduser.is_VIP %} 
+        <div class="col-sm">
+          <a class="btn btn-outline-primary mb-3" href="{% url 'Groups:VIPeval' %}" role="button">
+            Evaluations
           </a>           
         </div>
+        {% endif %}
     </div>
   </div>
 

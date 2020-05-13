@@ -50,7 +50,7 @@ def StartVoteView(request, pk):
             messages.success(request, 'Vote Started!')
             return redirect('/groups/%s/votes' %group.pk)
         else:
-            if (request.POST.get('username')):
+            if (form.cleaned_data['user']):
                 if form.checkOwner():
                     messages.info(request, 'You Can only praise a group owner!')
                     return redirect('/groups/%s/votes' %group.pk)
@@ -87,7 +87,7 @@ def GroupMemberVoteView(request, pk):
     if not voteTypeObject == None:
         vote = VoteType.objects.get(group=group)
         userVotingOn = vote.user
-        if userVotingOn.username == request.user.username:
+        if userVotingOn.username == request.user.username and not (vote.vote_type == 'shutdown'):
             messages.error(request, "You can't vote since the vote happening is for you!")
             return redirect('/groups/%s' %group.pk)
         

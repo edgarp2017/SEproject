@@ -60,5 +60,6 @@ def update_user_profile(sender, instance, created, **kwargs):
 
 class ClosedGroups(models.Model):
         group =  models.ForeignKey(Group, on_delete=models.CASCADE)
+        isEvaluted = models.BooleanField(default= False, blank=False)
     
 

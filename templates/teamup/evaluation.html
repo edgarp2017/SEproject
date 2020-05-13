@@ -5,11 +5,13 @@
 <form method="POST">
     {% csrf_token %}
 
-   {% for member in members %} 
+   {% for member in members %}
+   {% if request.user.username != member.username %} 
    <h5>{{member.username}}:</h5>
    <label for="rep{{member.username}}">Reps: </label>
    <input type="number" name="rep{{member.username}}" min="1" max="25"><br>
 
+   
    <input type="checkbox" name="whiteBox" value="True">
    <label for="whiteBox"> Add To whiteBox</label><br>
 
@@ -18,6 +20,7 @@
 
    <label for="reason">Reason for Box Choice:</label>
   <input type="text" name="reason"><br><br>
+  {% endif %}
    {% endfor %}
 
 <button type="submit" class="btnSubmit" name="submit">submit</button>

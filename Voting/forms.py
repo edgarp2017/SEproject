@@ -151,10 +151,12 @@ class VoteForm(forms.ModelForm):
                     voteObject.delete()
 
             elif (voteObject.vote_type == 'shutdown'):
-                closedGroup, created = ClosedGroups.objects.update_or_create(group =self.group)
-                if created:
-                    print("group is marked for shutdown")
-                closedGroup.save()
+                if voteResponse.no_count == 0:
+                    closedGroup, created = ClosedGroups.objects.update_or_create(group =self.group)
+                    if created:
+                        print("group is marked for shutdown")
+                    closedGroup.save()
+                voteObject.delete()
 
                 if voteResponse.no_count == 0:
                     WarnList.objects.create(user=user, group=self.group)
