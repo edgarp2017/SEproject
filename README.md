@@ -7,7 +7,7 @@
 2.  Clone project to a directory of your choice
 
 **This instructions are to be executed in the directory just outside of the project folder (the directory into which you cloned the repo)**
-3.  pip install virtualenv
+[3]  pip install virtualenv
 4.  SetUp virtual env as follow
 5.  python -m venv env_name
 6.  source env_name/bin/activate
