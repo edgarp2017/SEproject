@@ -1,6 +1,11 @@
 # CSC 322 Project
 
-## pip install -r requirements.txt
+## Set Up
+1. pip install virtualenv
+2. SetUp virtual env
+3. python pip install Django==3.0.4
+4. pip install django-widget-tweaks
+5. pip install django-crispy-forms
 
 This is a Web-Based Application that allows users to create teams with a certain purpose
 so that other users can join them either by themselves or invite.
