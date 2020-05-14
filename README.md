@@ -1,11 +1,36 @@
 # CSC 322 Project
 
-## Set Up
-1. pip install virtualenv
-2. SetUp virtual env
-3. python pip install Django==3.0.4
-4. pip install django-widget-tweaks
-5. pip install django-crispy-forms
+# Set Up
+## Any pip or python command might be python3 and pip3 depending on what your default version of python is
+### This project was developed using Django, Python3 and SQlite
+1.  Install pip if not installed already **(package manager) pip commands are executed from the terminal**
+2.  Clone project to a directory of your choice
+
+**This instructions are to be executed in the directory just outside of the project folder (the directory into which you cloned the repo)**
+3.  pip install virtualenv
+4.  SetUp virtual env as follow:
+     python -m venv env_name
+     source env_name/bin/activate
+5.  pip install --upgrade pip
+6.  pip install django
+7.  pip install django-widget-tweaks
+8.  pip install django-crispy-forms
+9.  cd project_name
+10.  python manage.py makemigrations
+11. python manage.py migrate
+12. python manage.py createsuperuser
+        Enter user name
+        Enter email **can leave blank**
+        Enter password
+        Confirm password
+13. python manage.py runserver
+14. Open browser and go to localhost:8000/admin
+15. login with super user account
+16. go the accepted users tables and click on the add button on the top right
+    add your user as an accepted user and check the SU checkbox and type anything
+    as a reference then click save. **Super user can login in the site with the credentials previously created on the terminal**
+17. proceed to localhost:8000
+18. **Test!!!!!!**
 
 This is a Web-Based Application that allows users to create teams with a certain purpose
 so that other users can join them either by themselves or invite.
