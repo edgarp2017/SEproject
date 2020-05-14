@@ -4,9 +4,9 @@
 ## Any pip or python command might be python3 and pip3 depending on what your default version of python is
 ### This project was developed using Django, Python3 and SQlite
 1.  Install pip if not installed already **(package manager) pip commands are executed from the terminal**
-2.  Clone project to a directory of your choice
+2.  Clone the project repo to a directory of your choice
 
-**This instructions are to be executed in the directory just outside of the project folder (the directory into which you cloned the repo).**
+**These instructions are to be executed in the directory just outside of the project folder (the directory into which you cloned the repo).**
 
 3.  pip install virtualenv
 4.  SetUp virtual env as follow
@@ -17,7 +17,7 @@
 9.  pip install django-widget-tweaks
 10. pip install django-crispy-forms
 11. cd project_name
-12.  python manage.py makemigrations
+12. python manage.py makemigrations
 13. python manage.py migrate
 14. python manage.py createsuperuser
 15. Enter user name
@@ -30,8 +30,8 @@
 22. go the accepted users tables and click on the add button on the top right
     add your user as an accepted user and check the SU checkbox and type anything
     as a reference then click save. **Super user can login in the site with the credentials previously created on the terminal**
-13. proceed to localhost:8000
-124. **Test!!!!!!**
+23. proceed to localhost:8000
+24. **Test!!!!!!**
 
 This is a Web-Based Application that allows users to create teams with a certain purpose
 so that other users can join them either by themselves or invite.
