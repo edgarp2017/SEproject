@@ -8,29 +8,29 @@
 
 **This instructions are to be executed in the directory just outside of the project folder (the directory into which you cloned the repo)**
 3.  pip install virtualenv
-4.  SetUp virtual env as follow:
-     python -m venv env_name
-     source env_name/bin/activate
-5.  pip install --upgrade pip
-6.  pip install django
-7.  pip install django-widget-tweaks
-8.  pip install django-crispy-forms
-9.  cd project_name
-10.  python manage.py makemigrations
-11. python manage.py migrate
-12. python manage.py createsuperuser
-        Enter user name
-        Enter email **can leave blank**
-        Enter password
-        Confirm password
-13. python manage.py runserver
-14. Open browser and go to localhost:8000/admin
-15. login with super user account
-16. go the accepted users tables and click on the add button on the top right
+4.  SetUp virtual env as follow
+5.  python -m venv env_name
+6.  source env_name/bin/activate
+7.  pip install --upgrade pip
+8.  pip install django
+9.  pip install django-widget-tweaks
+10. pip install django-crispy-forms
+11. cd project_name
+12.  python manage.py makemigrations
+13. python manage.py migrate
+14. python manage.py createsuperuser
+15. Enter user name
+16. Enter email **can leave blank**
+17. Enter password
+18. Confirm password
+19. python manage.py runserver
+20. Open browser and go to localhost:8000/admin
+21. login with super user account
+22. go the accepted users tables and click on the add button on the top right
     add your user as an accepted user and check the SU checkbox and type anything
     as a reference then click save. **Super user can login in the site with the credentials previously created on the terminal**
-17. proceed to localhost:8000
-18. **Test!!!!!!**
+13. proceed to localhost:8000
+124. **Test!!!!!!**
 
 This is a Web-Based Application that allows users to create teams with a certain purpose
 so that other users can join them either by themselves or invite.
